@@ -1,0 +1,986 @@
+{
+  "appid": "f94bd431-cfab-466b-8c09-3ae5954165ba",
+  "name": "Sophos Endpoint Protection",
+  "description": "Sophos Endpoint Protection App for Phantom.",
+  "type": "endpoint",
+  "product_vendor": "Sophos",
+  "logo": "sophosendpointprotection.svg",
+  "logo_dark": "sophosendpointprotection_dark.svg",
+  "product_name": "Sophos Endpoint Protection",
+  "product_version_regex": ".*",
+  "publisher": "FDSE @ Splunk.",
+  "license": "Copyright (c) FDSE @ Splunk., 2020",
+  "app_version": "1.2.0",
+  "utctime_updated": "2020-02-29T03:50:16.631912Z",
+  "package_name": "phantom_sophosendpointprotection",
+  "main_module": "sophosendpointprotection_connector.pyc",
+  "min_phantom_version": "4.6.18265",
+  "app_wizard_version": "1.0.0",
+  "configuration": {
+    "client_id": {
+      "description": "Enter the Client ID here",
+      "data_type": "string",
+      "required": true,
+      "value_list": [],
+      "default": "",
+      "order": 0
+    },
+    "client_secret": {
+      "description": "Enter the Client Secret here",
+      "data_type": "string",
+      "required": true,
+      "value_list": [],
+      "default": "",
+      "order": 1
+    }
+  },
+  "actions": [{
+      "action": "test connectivity",
+      "identifier": "test_connectivity",
+      "description": "Validate the asset configuration for connectivity using supplied configuration",
+      "verbose": "",
+      "type": "test",
+      "read_only": true,
+      "parameters": {},
+      "output": [],
+      "versions": "EQ(*)"
+    },
+    {
+      "action": "list endpoints",
+      "identifier": "list_endpoints",
+      "description": "List all the endpoints/sensors configured on the device",
+      "verbose": "",
+      "type": "investigate",
+      "read_only": true,
+      "parameters": {
+        "page_from_key": {
+          "description": "The key of the item from where to fetch a page.",
+          "data_type": "string",
+          "required": false,
+          "primary": false,
+          "order": 0
+        },
+        "page_size": {
+          "description": "The size of the page requested.",
+          "data_type": "string",
+          "required": false,
+          "primary": false,
+          "order": 1
+        },
+        "page_total": {
+          "description": "Whether the number of pages should be calculated and returned in the response.",
+          "data_type": "string",
+          "required": false,
+          "primary": false,
+          "default": false,
+          "order": 2
+        },
+        "sort": {
+          "description": "Defines how to sort the data. Please create a comma seperated string",
+          "data_type": "string",
+          "required": false,
+          "primary": false,
+          "order": 3
+        },
+        "health_status": {
+          "description": "Match endpoints that have any of the specified health status. Values allowed: bad, good, suspicious. Please create a comma seperated string",
+          "data_type": "string",
+          "required": false,
+          "primary": false,
+          "order": 4
+        },
+        "type": {
+          "description": "Match endpoints that have any of the specified endpoint type. Values allowed: computer, server, securityVm. Please create a comma seperated string",
+          "data_type": "string",
+          "required": false,
+          "primary": false,
+          "order": 5
+        },
+        "tamper_protection_enabled": {
+          "description": "Tamper protection status.",
+          "data_type": "boolean",
+          "required": false,
+          "primary": false,
+          "order": 6
+        },
+        "lockdown_status": {
+          "description": "Match endpoints that have any of the specified lockdown status. Values allowed: creatingWhitelist, installing, locked, notInstalled, registering, starting, stopping, unavailable, uninstalled, unlocked. Please create a comma seperated string",
+          "data_type": "string",
+          "required": false,
+          "primary": false,
+          "order": 7
+        },
+        "last_seen_before": {
+          "description": "Last seen after date and time (UTC) or duration inclusive.",
+          "data_type": "string",
+          "required": false,
+          "primary": false,
+          "order": 8
+        },
+        "last_seen_after": {
+          "description": "Last seen before date and time (UTC) or duration exclusive.",
+          "data_type": "string",
+          "required": false,
+          "primary": false,
+          "order": 9
+        },
+        "ids": {
+          "description": "Match endpoints that have any of the specified ids.",
+          "data_type": "string",
+          "required": false,
+          "primary": false,
+          "order": 10
+        },
+        "fields": {
+          "description": "The fields to return in a partial response.",
+          "data_type": "string",
+          "required": false,
+          "primary": false,
+          "order": 11
+        },
+        "view": {
+          "description": "Type of view to be returned in repsonse. Values allowed: basic, summary, full",
+          "data_type": "string",
+          "required": false,
+          "primary": false,
+          "order": 12
+        }
+      },
+      "output": [{
+          "data_path": "action_result.status",
+          "data_type": "string",
+          "column_name": "status",
+          "column_order": 0
+        },
+        {
+          "data_path": "action_result.parameter.page_from_key",
+          "data_type": "string",
+          "column_name": "pageFromKey",
+          "column_order": 1
+        },
+        {
+          "data_path": "action_result.parameter.page_size",
+          "data_type": "string",
+          "column_name": "pageSize",
+          "example_values": [50, 100],
+          "column_order": 2
+        },
+        {
+          "data_path": "action_result.parameter.page_total",
+          "data_type": "string",
+          "column_name": "pageTotal",
+          "example_values": [false, true],
+          "column_order": 3
+        },
+        {
+          "data_path": "action_result.parameter.sort",
+          "data_type": "string",
+          "column_name": "sort",
+          "column_order": 4
+        },
+        {
+          "data_path": "action_result.parameter.health_status",
+          "data_type": "string",
+          "column_name": "healthStatus",
+          "example_values": ["bad,good,suspicious", "bad", "good"],
+          "column_order": 5
+        },
+        {
+          "data_path": "action_result.parameter.type",
+          "data_type": "string",
+          "column_name": "type",
+          "example_values": ["computer, server, securityVm", "computer"],
+          "column_order": 6
+        },
+        {
+          "data_path": "action_result.parameter.tamper_protection_enabled",
+          "data_type": "string",
+          "column_name": "tamperProtectionEnabled",
+          "example_values": [true, false],
+          "column_order": 7
+        },
+        {
+          "data_path": "action_result.parameter.lockdown_status",
+          "data_type": "string",
+          "column_name": "lockdownStatus",
+          "example_values": [
+            "creatingWhitelist, installing",
+            "registering, starting"
+          ],
+          "column_order": 8
+        },
+        {
+          "data_path": "action_result.parameter.last_seen_before",
+          "data_type": "string",
+          "column_name": "lastSeenBefore",
+          "example_values": [
+            "2019-09-23T12:02:01.700Z",
+            "-P3DT4H5M0S",
+            "-PT20M",
+            "PT200S"
+          ],
+          "column_order": 9
+        },
+        {
+          "data_path": "action_result.parameter.last_seen_after",
+          "data_type": "string",
+          "column_name": "lastSeenAfter",
+          "example_values": [
+            "2019-09-23T12:02:01.700Z",
+            "-P3DT4H5M0S",
+            "PT20M",
+            "PT200S"
+          ],
+          "column_order": 10
+        },
+        {
+          "data_path": "action_result.parameter.ids",
+          "data_type": "string",
+          "column_name": "ids",
+          "column_order": 11
+        },
+        {
+          "data_path": "action_result.parameter.fields",
+          "data_type": "string",
+          "column_name": "fields",
+          "column_order": 12
+        },
+        {
+          "data_path": "action_result.parameter.view",
+          "data_type": "string",
+          "column_name": "view",
+          "example_values": ["basic", "summary", "full"],
+          "column_order": 13
+        },
+        {
+          "data_path": "action_result.data.*.id",
+          "data_type": "string",
+          "example_values": ["3fa85f64-5717-4562-b3fc-2c963f66afa6"]
+        },
+        {
+          "data_path": "action_result.data.*.type",
+          "data_type": "string",
+          "example_values": ["computer"]
+        },
+        {
+          "data_path": "action_result.data.*.tenant.id",
+          "data_type": "string",
+          "example_values": ["3fa85f64-5717-4562-b3fc-2c963f66afa6"]
+        },
+        {
+          "data_path": "action_result.data.*.hostname",
+          "data_type": "string"
+        },
+        {
+          "data_path": "action_result.data.*.health.overall",
+          "data_type": "string",
+          "example_values": ["good"]
+        },
+        {
+          "data_path": "action_result.data.*.health.threats.status",
+          "data_type": "string",
+          "example_values": ["good"]
+        },
+        {
+          "data_path": "action_result.data.*.health.services.status",
+          "data_type": "string",
+          "example_values": ["good"]
+        },
+        {
+          "data_path": "action_result.data.*.health.services.serviceDetails.*.name",
+          "data_type": "string"
+        },
+        {
+          "data_path": "action_result.data.*.health.services.serviceDetails.*.status",
+          "data_type": "string",
+          "example_values": ["running"]
+        },
+        {
+          "data_path": "action_result.data.*.os.isServer",
+          "data_type": "boolean",
+          "example_values": [true, false]
+        },
+        {
+          "data_path": "action_result.data.*.os.platform",
+          "data_type": "string",
+          "example_values": ["windows"]
+        },
+        {
+          "data_path": "action_result.data.*.os.name",
+          "data_type": "string"
+        },
+        {
+          "data_path": "action_result.data.*.os.majorVersion",
+          "data_type": "numeric",
+          "example_values": [0]
+        },
+        {
+          "data_path": "action_result.data.*.os.minorVersion",
+          "data_type": "numeric",
+          "example_values": [0]
+        },
+        {
+          "data_path": "action_result.data.*.os.build",
+          "data_type": "numeric",
+          "example_values": [0]
+        },
+        {
+          "data_path": "action_result.data.*.ipv4Addresses",
+          "data_type": "string"
+        },
+        {
+          "data_path": "action_result.data.*.ipv6Addresses",
+          "data_type": "string"
+        },
+        {
+          "data_path": "action_result.data.*.macAddresses",
+          "data_type": "string"
+        },
+        {
+          "data_path": "action_result.data.*.group.name",
+          "data_type": "string"
+        },
+        {
+          "data_path": "action_result.data.*.associatedPerson.name",
+          "data_type": "string"
+        },
+        {
+          "data_path": "action_result.data.*.associatedPerson.viaLogin",
+          "data_type": "string"
+        },
+        {
+          "data_path": "action_result.data.*.tamperProtectionEnabled",
+          "data_type": "boolean",
+          "example_values": [true, false]
+        },
+        {
+          "data_path": "action_result.data.*.assignedProducts.*.code",
+          "data_type": "string",
+          "example_values": ["coreAgent"]
+        },
+        {
+          "data_path": "action_result.data.*.assignedProducts.*.version",
+          "data_type": "string"
+        },
+        {
+          "data_path": "action_result.data.*.assignedProducts.*.status",
+          "data_type": "string",
+          "example_values": ["installed"]
+        },
+        {
+          "data_path": "action_result.data.*.lastSeenAt",
+          "data_type": "string",
+          "example_values": ["2019-09-23T12:02:01.700Z"]
+        },
+        {
+          "data_path": "action_result.data.*.encryption.volumes.*.volumeId",
+          "data_type": "string"
+        },
+        {
+          "data_path": "action_result.data.*.encryption.volumes.*.status",
+          "data_type": "string",
+          "example_values": ["notEncrypted"]
+        },
+        {
+          "data_path": "action_result.data.*.lockdown.status",
+          "data_type": "string",
+          "example_values": ["creatingWhitelist"]
+        },
+        {
+          "data_path": "action_result.data.*.lockdown.updateStatus",
+          "data_type": "string",
+          "example_values": ["upToDate"]
+        },
+        {
+          "data_path": "action_result.summary.total_number_of_items",
+          "data_type": "numeric"
+        },
+        {
+          "data_path": "action_result.message",
+          "data_type": "string"
+        },
+        {
+          "data_path": "summary.total_objects",
+          "data_type": "numeric"
+        },
+        {
+          "data_path": "summary.total_objects_successful",
+          "data_type": "numeric"
+        }
+      ],
+      "render": {
+        "type": "table"
+      },
+      "versions": "EQ(*)"
+    },
+    {
+      "action": "check updates",
+      "identifier": "check_updates",
+      "description": "Sends a request to the endpoint to check for Sophos management agent software updates.",
+      "type": "contain",
+      "read_only": false,
+      "parameters": {
+        "endpointid": {
+          "description": "The endpoint ID.",
+          "data_type": "string",
+          "required": true,
+          "primary": true
+        }
+      },
+      "output": [{
+          "data_path": "action_result.parameter.endpointid",
+          "data_type": "string"
+        },
+        {
+          "data_path": "action_result.status",
+          "data_type": "string",
+          "column_name": "status"
+        },
+        {
+          "data_path": "action_result.data.id",
+          "data_type": "string",
+          "example_values": ["3fa85f64-5717-4562-b3fc-2c963f66afa6"]
+        },
+        {
+          "data_path": "action_result.data.status",
+          "data_type": "string",
+          "example_values": ["requested"]
+        },
+        {
+          "data_path": "action_result.data.requestedAt",
+          "data_type": "string"
+        },
+        {
+          "data_path": "action_result.summary.number_of_endpoints_checked",
+          "data_type": "numeric"
+        },
+        {
+          "data_path": "action_result.message",
+          "data_type": "string"
+        },
+        {
+          "data_path": "summary.total_objects",
+          "data_type": "numeric"
+        },
+        {
+          "data_path": "summary.total_objects_successful",
+          "data_type": "numeric"
+        }
+      ],
+      "render": {
+        "type": "table"
+      },
+      "versions": "EQ(*)"
+    },
+    {
+      "action": "tamper protection switch",
+      "identifier": "tamper_protection_switch",
+      "description": "Turns Tamper Protection on or off on the endpoint.",
+      "verbose": "Turns Tamper Protection on or off on the endpoint. Or generates a new Tamper Protection password. Note that Tamper Protection can be enabled for an endpoint only if it has also been enabled globally.",
+      "read_only": false,
+      "type": "contain",
+      "parameters": {
+        "endpointid": {
+          "description": "The endpoint ID.",
+          "data_type": "string",
+          "required": true,
+          "primary": true,
+          "order": 0
+        },
+        "enabled": {
+          "description": "Whether Tamper Protection should be turned on for the endpoint.",
+          "data_type": "boolean",
+          "required": true,
+          "primary": false,
+          "default": "false",
+          "order": 1
+        },
+        "regeneratepassword": {
+          "description": "Whether a new Tamper Protection password should be generated.",
+          "data_type": "boolean",
+          "required": true,
+          "primary": false,
+          "default": "false",
+          "order": 2
+        }
+      },
+      "output": [{
+          "data_path": "action_result.parameter.endpointid",
+          "data_type": "string"
+        },
+        {
+          "data_path": "action_result.parameter.regeneratepassword",
+          "data_type": "boolean",
+          "example_values": [true, false]
+        },
+        {
+          "data_path": "action_result.parameter.enabled",
+          "data_type": "boolean",
+          "example_values": [true, false]
+        },
+        {
+          "data_path": "action_result.parameter.endpointid",
+          "data_type": "boolean",
+          "example_values": [true, false]
+        },
+        {
+          "data_path": "action_result.data.enabled",
+          "data_type": "boolean"
+        },
+        {
+          "data_path": "action_result.data.password",
+          "data_type": "boolean"
+        },
+        {
+          "data_path": "action_result.data.previousPasswords.*.password",
+          "data_type": "string",
+          "example_values": ["requested"]
+        },
+        {
+          "data_path": "action_result.data.previousPasswords.*.invalidatedAt",
+          "data_type": "string",
+          "example_values": ["requested"]
+        },
+        {
+          "data_path": "action_result.data.enabled",
+          "data_type": "boolean"
+        },
+        {
+          "data_path": "action_result.summary.number_of_endpoints_tp_settings_updated",
+          "data_type": "numeric"
+        },
+        {
+          "data_path": "action_result.status",
+          "data_type": "string"
+        },
+        {
+          "data_path": "action_result.message",
+          "data_type": "string"
+        },
+        {
+          "data_path": "summary.total_objects",
+          "data_type": "numeric"
+        },
+        {
+          "data_path": "summary.total_objects_successful",
+          "data_type": "numeric"
+        }
+      ],
+      "render": {
+        "type": "table"
+      },
+      "versions": "EQ(*)"
+    },
+    {
+      "action": "get tamperprotection settings",
+      "identifier": "get_tamper_protection_settings",
+      "description": "Get the Tamper Protection settings for the specified endpoint.",
+      "verbose": "Get the Tamper Protection settings for the specified endpoint.",
+      "type": "investigate",
+      "read_only": true,
+      "parameters": {
+        "endpointid": {
+          "description": "The endpoint ID.",
+          "data_type": "string",
+          "required": true,
+          "primary": false,
+          "order": 0
+        }
+      },
+      "output": [{
+          "data_path": "action_result.parameter.endpointid",
+          "data_type": "string"
+        },
+        {
+          "data_path": "action_result.data.enabled",
+          "data_type": "boolean",
+          "example_values": [true, false]
+        },
+        {
+          "data_path": "action_result.data.password",
+          "data_type": "string"
+        },
+        {
+          "data_path": "action_result.data.previousPasswords.*.password",
+          "data_type": "string",
+          "example_values": ["requested"]
+        },
+        {
+          "data_path": "action_result.data.previousPasswords.*.invalidatedAt",
+          "data_type": "string",
+          "example_values": ["requested"]
+        },
+        {
+          "data_path": "action_result.summary.number_of_endpoints_tp_settings_recieved",
+          "data_type": "numeric"
+        },
+        {
+          "data_path": "action_result.status",
+          "data_type": "string",
+          "column_name": "status"
+        },
+        {
+          "data_path": "action_result.message",
+          "data_type": "string"
+        },
+        {
+          "data_path": "summary.total_objects",
+          "data_type": "numeric"
+        },
+        {
+          "data_path": "summary.total_objects_successful",
+          "data_type": "numeric"
+        }
+      ],
+      "render": {
+        "type": "table"
+      },
+      "versions": "EQ(*)"
+    },
+    {
+      "action": "perform scan",
+      "identifier": "perform_scan",
+      "description": "Sends a request to the specified endpoint to perform or configure a scan.",
+      "verbose": "Sends a request to the specified endpoint to perform or configure a scan.",
+      "read_only": false,
+      "type": "contain",
+      "parameters": {
+        "endpointid": {
+          "description": "The endpoint ID.",
+          "data_type": "string",
+          "required": true,
+          "primary": false,
+          "order": 0
+        }
+      },
+      "output": [{
+          "data_path": "action_result.parameter.endpointid",
+          "data_type": "string",
+          "column_name": "endpointid",
+          "column_order": 0
+        },
+        {
+          "data_path": "action_result.data.id",
+          "data_type": "string",
+          "example_values": ["3fa85f64-5717-4562-b3fc-2c963f66afa6"],
+          "column_order": 1
+        },
+        {
+          "data_path": "action_result.data.status",
+          "data_type": "string",
+          "example_values": ["requested"],
+          "column_order": 2
+        },
+        {
+          "data_path": "action_result.data.id",
+          "data_type": "string",
+          "column_order": 3
+        },
+        {
+          "data_path": "action_result.status",
+          "data_type": "string",
+          "column_name": "status",
+          "column_order": 4
+        },
+        {
+          "data_path": "action_result.summary.number_of_scans_performed",
+          "data_type": "numeric"
+        },
+        {
+          "data_path": "action_result.message",
+          "data_type": "string"
+        },
+        {
+          "data_path": "summary.total_objects",
+          "data_type": "numeric"
+        },
+        {
+          "data_path": "summary.total_objects_successful",
+          "data_type": "numeric"
+        }
+      ],
+      "render": {
+        "type": "table"
+      },
+      "versions": "EQ(*)"
+    },
+    {
+      "action": "delete endpoint",
+      "identifier": "delete_endpoint",
+      "description": "Deletes the specified endpoint.",
+      "verbose": "Deletes the specified endpoint.",
+      "type": "correct",
+      "read_only": false,
+      "parameters": {
+        "endpointid": {
+          "description": "The endpoint ID.",
+          "data_type": "string",
+          "required": true,
+          "primary": false,
+          "contains": [],
+          "value_list": [],
+          "default": "",
+          "order": 0
+        }
+      },
+      "output": [{
+          "data_path": "action_result.parameter.endpointid",
+          "data_type": "string",
+          "contains": [],
+          "column_name": "endpointid",
+          "column_order": 0
+        },
+        {
+          "data_path": "action_result.status",
+          "data_type": "string",
+          "column_name": "status",
+          "column_order": 1
+        },
+        {
+          "data_path": "action_result.message",
+          "data_type": "string"
+        },
+        {
+          "data_path": "action_result.summary.total_endpoints_deleted",
+          "data_type": "numeric"
+        },
+        {
+          "data_path": "action_result.data.endpoint_deleted",
+          "data_type": "string"
+        },
+        {
+          "data_path": "summary.total_objects",
+          "data_type": "numeric"
+        },
+        {
+          "data_path": "summary.total_objects_successful",
+          "data_type": "numeric"
+        }
+      ],
+      "render": {
+        "type": "table"
+      },
+      "versions": "EQ(*)"
+    },
+    {
+      "action": "get individual endpoint",
+      "identifier": "get_individual_endpoint",
+      "description": "Get the endpoint based on ID.",
+      "verbose": "Get the endpoint based on ID.",
+      "type": "contain",
+      "read_only": true,
+      "parameters": {
+        "endpointid": {
+          "description": "The endpoint ID.",
+          "data_type": "string",
+          "required": true,
+          "primary": false,
+          "contains": [],
+          "value_list": [],
+          "default": "",
+          "order": 0
+        },
+        "fields": {
+          "description": "The fields to return in a partial response.",
+          "data_type": "string",
+          "required": false,
+          "primary": false,
+          "order": 1
+        },
+        "view": {
+          "description": "Type of view to be returned in repsonse. Values allowed: basic, summary, full",
+          "data_type": "string",
+          "required": false,
+          "primary": false,
+          "order": 2
+        }
+      },
+      "output": [{
+          "data_path": "action_result.parameter.endpointid",
+          "data_type": "string",
+          "contains": [],
+          "column_name": "endpointid",
+          "column_order": 0
+        },
+        {
+          "data_path": "action_result.parameter.fields",
+          "data_type": "string",
+          "column_name": "fields",
+          "column_order": 1
+        },
+        {
+          "data_path": "action_result.parameter.view",
+          "data_type": "string",
+          "column_name": "view",
+          "example_values": ["basic", "summary", "full"],
+          "column_order": 2
+        },
+        {
+          "data_path": "action_result.status",
+          "data_type": "string",
+          "column_name": "status",
+          "column_order": 3
+        },
+        {
+          "data_path": "action_result.data.*.id",
+          "data_type": "string",
+          "example_values": ["3fa85f64-5717-4562-b3fc-2c963f66afa6"]
+        },
+        {
+          "data_path": "action_result.data.*.type",
+          "data_type": "string",
+          "example_values": ["computer"]
+        },
+        {
+          "data_path": "action_result.data.*.tenant.id",
+          "data_type": "string",
+          "example_values": ["3fa85f64-5717-4562-b3fc-2c963f66afa6"]
+        },
+        {
+          "data_path": "action_result.data.*.hostname",
+          "data_type": "string"
+        },
+        {
+          "data_path": "action_result.data.*.health.overall",
+          "data_type": "string",
+          "example_values": ["good"]
+        },
+        {
+          "data_path": "action_result.data.*.health.threats.status",
+          "data_type": "string",
+          "example_values": ["good"]
+        },
+        {
+          "data_path": "action_result.data.*.health.services.status",
+          "data_type": "string",
+          "example_values": ["good"]
+        },
+        {
+          "data_path": "action_result.data.*.health.services.serviceDetails.*.name",
+          "data_type": "string"
+        },
+        {
+          "data_path": "action_result.data.*.health.services.serviceDetails.*.status",
+          "data_type": "string",
+          "example_values": ["running"]
+        },
+        {
+          "data_path": "action_result.data.*.os.isServer",
+          "data_type": "boolean",
+          "example_values": [true, false]
+        },
+        {
+          "data_path": "action_result.data.*.os.platform",
+          "data_type": "string",
+          "example_values": ["windows"]
+        },
+        {
+          "data_path": "action_result.data.*.os.name",
+          "data_type": "string"
+        },
+        {
+          "data_path": "action_result.data.*.os.majorVersion",
+          "data_type": "numeric",
+          "example_values": [0]
+        },
+        {
+          "data_path": "action_result.data.*.os.minorVersion",
+          "data_type": "numeric",
+          "example_values": [0]
+        },
+        {
+          "data_path": "action_result.data.*.os.build",
+          "data_type": "numeric",
+          "example_values": [0]
+        },
+        {
+          "data_path": "action_result.data.*.ipv4Addresses",
+          "data_type": "string"
+        },
+        {
+          "data_path": "action_result.data.*.ipv6Addresses",
+          "data_type": "string"
+        },
+        {
+          "data_path": "action_result.data.*.macAddresses",
+          "data_type": "string"
+        },
+        {
+          "data_path": "action_result.data.*.group.name",
+          "data_type": "string"
+        },
+        {
+          "data_path": "action_result.data.*.associatedPerson.name",
+          "data_type": "string"
+        },
+        {
+          "data_path": "action_result.data.*.associatedPerson.viaLogin",
+          "data_type": "string"
+        },
+        {
+          "data_path": "action_result.data.*.tamperProtectionEnabled",
+          "data_type": "boolean",
+          "example_values": [true, false]
+        },
+        {
+          "data_path": "action_result.data.*.assignedProducts.*.code",
+          "data_type": "string",
+          "example_values": ["coreAgent"]
+        },
+        {
+          "data_path": "action_result.data.*.assignedProducts.*.version",
+          "data_type": "string"
+        },
+        {
+          "data_path": "action_result.data.*.assignedProducts.*.status",
+          "data_type": "string",
+          "example_values": ["installed"]
+        },
+        {
+          "data_path": "action_result.data.*.lastSeenAt",
+          "data_type": "string",
+          "example_values": ["2019-09-23T12:02:01.700Z"]
+        },
+        {
+          "data_path": "action_result.data.*.encryption.volumes.*.volumeId",
+          "data_type": "string"
+        },
+        {
+          "data_path": "action_result.data.*.encryption.volumes.*.status",
+          "data_type": "string",
+          "example_values": ["notEncrypted"]
+        },
+        {
+          "data_path": "action_result.data.*.lockdown.status",
+          "data_type": "string",
+          "example_values": ["creatingWhitelist"]
+        },
+        {
+          "data_path": "action_result.data.*.lockdown.updateStatus",
+          "data_type": "string",
+          "example_values": ["upToDate"]
+        },
+        {
+          "data_path": "action_result.summary.total_number_of_items",
+          "data_type": "numeric"
+        },
+        {
+          "data_path": "action_result.message",
+          "data_type": "string"
+        },
+        {
+          "data_path": "summary.total_objects",
+          "data_type": "numeric"
+        },
+        {
+          "data_path": "summary.total_objects_successful",
+          "data_type": "numeric"
+        }
+      ],
+      "render": {
+        "type": "table"
+      },
+      "versions": "EQ(*)"
+    }
+  ]
+}
