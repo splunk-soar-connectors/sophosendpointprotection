@@ -196,11 +196,11 @@ class SophosEndpointProtectionConnector(BaseConnector):
         self.save_progress(("Response in JSON: {}".format(str(resp_json))))
         msg = action_result.get_message()
 
-        if (msg and 'token is invalid' in msg or
-                'token has expired' in msg or
-                'ExpiredAuthenticationToken' in msg or
-                'authorization failed' in msg or
-                'access denied ' in msg):
+        if msg and 'token is invalid' in msg or \
+                'token has expired' in msg or \
+                'ExpiredAuthenticationToken' in msg or \
+                'authorization failed' in msg or \
+                'access denied ' in msg:
             ret_val = self._get_token(action_result)
             headers.update({
                 'Authorization': ('Bearer {}'.format(self._JWT_token)),
