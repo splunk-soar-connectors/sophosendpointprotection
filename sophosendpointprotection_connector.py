@@ -23,8 +23,8 @@ import re
 import phantom.app as phantom
 import requests
 from bs4 import BeautifulSoup
-from phantom.base_connector import BaseConnector
 from phantom.action_result import ActionResult
+from phantom.base_connector import BaseConnector
 
 from sophosendpointprotection_consts import *
 
