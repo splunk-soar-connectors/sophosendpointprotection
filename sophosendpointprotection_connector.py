@@ -196,7 +196,11 @@ class SophosEndpointProtectionConnector(BaseConnector):
         self.save_progress(("Response in JSON: {}".format(str(resp_json))))
         msg = action_result.get_message()
 
-        if msg and 'token is invalid' in msg or 'token has expired' in msg or 'ExpiredAuthenticationToken' in msg or 'authorization failed' in msg or 'access denied ' in msg:
+        if (msg and 'token is invalid' in msg
+            or 'token has expired' in msg
+            or 'ExpiredAuthenticationToken' in msg
+            or 'authorization failed' in msg
+            or 'access denied ' in msg):
             ret_val = self._get_token(action_result)
             headers.update({
                 'Authorization': ('Bearer {}'.format(self._JWT_token)),
@@ -754,8 +758,10 @@ class SophosEndpointProtectionConnector(BaseConnector):
 
 if __name__ == '__main__':
 
-    import pudb
     import argparse
+    import sys
+
+    import pudb
 
     pudb.set_trace()
 
@@ -782,7 +788,7 @@ if __name__ == '__main__':
             login_url = SophosEndpointProtectionConnector._get_phantom_base_url() + '/login'
 
             print("Accessing the Login page")
-            r = requests.get(login_url, verify=False)
+            r = requests.get(login_url, timeout=60)
             csrftoken = r.cookies['csrftoken']
 
             data = dict()
@@ -795,11 +801,11 @@ if __name__ == '__main__':
             headers['Referer'] = login_url
 
             print("Logging into Platform to get the session id")
-            r2 = requests.post(login_url, verify=False, data=data, headers=headers)
+            r2 = requests.post(login_url, data=data, headers=headers, timeout=60)
             session_id = r2.cookies['sessionid']
         except Exception as e:
             print("Unable to get session id from the platform. Error: " + str(e))
-            exit(1)
+            sys.exit(1)
 
     with open(args.input_test_json) as f:
         in_json = f.read()
@@ -816,4 +822,4 @@ if __name__ == '__main__':
         ret_val = connector._handle_action(json.dumps(in_json), None)
         print(json.dumps(json.loads(ret_val), indent=4))
 
-    exit(0)
+    sys.exit(0)

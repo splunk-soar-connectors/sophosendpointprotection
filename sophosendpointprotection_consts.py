@@ -30,7 +30,18 @@ SOPHOS_PARAMS_ITEMSTYPE = ["blocked", "allowed"]
 SOPHOS_PARAMS_PROPTYPE = ["path", "sha256", "certificateSigner"]
 SOPHOS_PARAMS_ENDPOINTTYPE = ["computer", "server", "securityVm"]
 SOPHOS_PARAMS_ENDPOINTHEALTH = ["bad", "good", "suspicious", "unknown"]
-SOPHOS_PARAMS_ENDPOINTLOCKDOWN = ["creatingWhitelist", "installing", "locked", "notInstalled", "registering", "starting", "stopping", "unavailable", "uninstalled", "unlocked"]
+SOPHOS_PARAMS_ENDPOINTLOCKDOWN = [
+    "creatingWhitelist",
+    "installing",
+    "locked",
+    "notInstalled",
+    "registering",
+    "starting",
+    "stopping",
+    "unavailable",
+    "uninstalled",
+    "unlocked"
+]
 
 # Endpoints
 JWT_TOKEN_ENDPOINT = "https://id.sophos.com/api/v2/oauth2/token"
