@@ -556,7 +556,7 @@
             "action": "tamper protection switch",
             "identifier": "tamper_protection_switch",
             "description": "Turn Tamper Protection on or off on the endpoint",
-            "verbose": "Turn Tamper Protection on or off on the endpoint or generate a new Tamper Protection password. Note that Tamper Protection can be enabled for an endpoint only if it has also been enabled globally",
+            "verbose": "Turn Tamper Protection on or off on the endpoint or generate a new Tamper Protection password. Note that Tamper Protection can be enabled for an endpoint only if it has also been enabled globally.",
             "read_only": false,
             "type": "contain",
             "parameters": {
@@ -1411,7 +1411,7 @@
             "action": "block item",
             "identifier": "block_item",
             "description": "Add item to blocked list",
-            "verbose": "Block an item from exoneration by SHA256 checksum",
+            "verbose": "Block an item from exoneration by SHA256 checksum.",
             "type": "investigate",
             "read_only": true,
             "parameters": {
@@ -1550,7 +1550,7 @@
             "action": "allow item",
             "identifier": "allow_item",
             "description": "Add item to allowed list",
-            "verbose": "Exempt an item from conviction by path, SHA256 checksum or certificate signer",
+            "verbose": "Exempt an item from conviction by path, SHA256 checksum or certificate signer.",
             "type": "investigate",
             "read_only": true,
             "parameters": {
