@@ -94,12 +94,6 @@
           "data_type": "string",
           "required": false,
           "primary": false,
-          "value_list": [
-            "bad",
-            "good",
-            "suspicious",
-            "unknown"
-          ],
           "allow_list": true,
           "order": 3
         },
@@ -109,11 +103,6 @@
           "data_type": "string",
           "required": false,
           "primary": false,
-          "value_list": [
-            "computer",
-            "server",
-            "securityVm"
-          ],
           "allow_list": true,
           "order": 4
         },
@@ -126,23 +115,11 @@
         },
         "lockdown_status": {
           "description": "Get endpoints having any of the specified lockdown statuses (comma separated)",
-          "verbose": " Values allowed: creatingWhitelist, installing, locked, notInstalled, registering, starting, stopping, unavailable, uninstalled, unlocked",
+          "verbose": "Values allowed: creatingWhitelist, installing, locked, notInstalled, registering, starting, stopping, unavailable, uninstalled, unlocked",
           "data_type": "string",
           "required": false,
           "primary": false,
           "default": true,
-          "value_list": [
-            "creatingWhitelist",
-            "installing",
-            "locked",
-            "notInstalled",
-            "registering",
-            "starting",
-            "stopping",
-            "unavailable",
-            "uninstalled",
-            "unlocked"
-          ],
           "allow_list": true,
           "order": 6
         },
@@ -195,16 +172,12 @@
           "order": 12
         },
         "search_fields": {
-          "description": "List of search fields for finding the given search term. Defaults to all applicable fields",
+          "description": "List of search fields for finding the given search term (comma separated). Defaults to all applicable fields",
+          "verbose": "Values allowed: hostname, groupName, associatedPersonName, ipAddresses",
           "data_type": "string",
           "required": false,
-          "value_list": [
-            "hostname",
-            "groupName",
-            "associatedPersonName",
-            "ipAddresses"
-          ],
           "primary": false,
+          "allow_list": true,
           "order": 13
         }
       },

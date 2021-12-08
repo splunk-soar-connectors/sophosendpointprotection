@@ -26,6 +26,7 @@ SOPHOS_PT_GLOBAL_URL = "global"
 SOPHOS_PT_TOKEN = "id"
 
 SOPHOS_PARAMS_VIEW = ["basic", "summary", "full"]
+SOPHOS_PARAM_SEARCHFIELDS = ["hostname", "groupName", "associatedPersonName", "ipAddresses"]
 SOPHOS_PARAMS_ITEMSTYPE = ["blocked", "allowed"]
 SOPHOS_PARAMS_PROPTYPE = ["path", "sha256", "certificateSigner"]
 SOPHOS_PARAMS_ENDPOINTTYPE = ["computer", "server", "securityVm"]

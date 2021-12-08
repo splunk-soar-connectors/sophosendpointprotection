@@ -361,6 +361,7 @@ class SophosEndpointProtectionConnector(BaseConnector):
         endpoint_type = param.get("type", None)
         health_status = param.get("health_status", None)
         lockdown_status = param.get("lockdown_status", None)
+        search_fields = param.get("search_fields", None)
 
         # Validate parameters
         if view and view not in SOPHOS_PARAMS_VIEW:
@@ -371,6 +372,8 @@ class SophosEndpointProtectionConnector(BaseConnector):
             return action_result.set_status(phantom.APP_ERROR, SOPHOS_PARAMS_INVALID_ERR.format(name="health_status"))
         if lockdown_status and not self._validate_input(lockdown_status, SOPHOS_PARAMS_ENDPOINTLOCKDOWN):
             return action_result.set_status(phantom.APP_ERROR, SOPHOS_PARAMS_INVALID_ERR.format(name="lockdown_status"))
+        if search_fields and not self._validate_input(search_fields, SOPHOS_PARAM_SEARCHFIELDS):
+            return action_result.set_status(phantom.APP_ERROR, SOPHOS_PARAMS_INVALID_ERR.format(name="search_fields"))
 
         param['action_name'] = 'list endpoints'
         ret_val = self._handle_endpoints(action_result, param)
