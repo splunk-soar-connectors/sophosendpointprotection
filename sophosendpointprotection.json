@@ -4,8 +4,8 @@
   "description": "This app supports various investigative and containment actions on Sophos Endpoint Protection",
   "type": "endpoint",
   "product_vendor": "Sophos",
-  "logo": "sophosendpointprotection.svg",
-  "logo_dark": "sophosendpointprotection_dark.svg",
+  "logo": "logo_sophosendpointprotection.svg",
+  "logo_dark": "logo_sophosendpointprotection_dark.svg",
   "product_name": "Sophos Endpoint Protection",
   "python_version": "3",
   "product_version_regex": ".*",
@@ -22,35 +22,31 @@
     }
   ],
   "license": "Copyright (c) 2021 Splunk Inc.",
-  "app_version": "1.3.0",
+  "app_version": "1.0.0",
   "utctime_updated": "2020-02-29T03:50:16.631912Z",
   "package_name": "phantom_sophosendpointprotection",
   "main_module": "sophosendpointprotection_connector.py",
-  "min_phantom_version": "4.9.39220",
+  "min_phantom_version": "5.0.0",
   "app_wizard_version": "1.0.0",
   "configuration": {
     "client_id": {
       "description": "Enter the Client ID here",
       "data_type": "string",
       "required": true,
-      "value_list": [],
-      "default": "",
       "order": 0
     },
     "client_secret": {
       "description": "Enter the Client Secret here",
       "data_type": "password",
       "required": true,
-      "value_list": [],
-      "default": "",
       "order": 1
     }
   },
-  "actions": [{
+  "actions": [
+    {
       "action": "test connectivity",
       "identifier": "test_connectivity",
       "description": "Validate the asset configuration for connectivity using supplied configuration",
-      "verbose": "",
       "type": "test",
       "read_only": true,
       "parameters": {},
@@ -61,64 +57,46 @@
       "action": "list endpoints",
       "identifier": "list_endpoints",
       "description": "List all the endpoints/sensors configured on the device",
-      "verbose": "",
       "type": "investigate",
       "read_only": true,
       "parameters": {
         "page_from_key": {
           "description": "The key of the item from where to fetch a page",
           "data_type": "string",
-          "required": false,
-          "primary": false,
           "order": 0
         },
         "page_size": {
           "description": "The size of the page requested",
           "data_type": "string",
-          "required": false,
-          "primary": false,
           "default": 50,
           "order": 1
         },
         "sort": {
           "description": "Define how to sort the data (comma separated)",
           "data_type": "string",
-          "required": false,
-          "primary": false,
           "allow_list": true,
           "order": 2
         },
         "health_status": {
           "description": "Get endpoints having any of the specified health status (comma separated)",
-          "verbose": "Values allowed: bad, good, suspicious, unknown",
           "data_type": "string",
-          "required": false,
-          "primary": false,
           "allow_list": true,
           "order": 3
         },
         "type": {
           "description": "Get endpoints having any of the specified endpoint type (comma separated)",
-          "verbose": "Values allowed: computer, server, securityVm",
           "data_type": "string",
-          "required": false,
-          "primary": false,
           "allow_list": true,
           "order": 4
         },
         "tamper_protection_enabled": {
           "description": "Tamper protection status",
           "data_type": "boolean",
-          "required": false,
-          "primary": false,
           "order": 5
         },
         "lockdown_status": {
           "description": "Get endpoints having any of the specified lockdown statuses (comma separated)",
-          "verbose": "Values allowed: creatingWhitelist, installing, locked, notInstalled, registering, starting, stopping, unavailable, uninstalled, unlocked",
           "data_type": "string",
-          "required": false,
-          "primary": false,
           "default": true,
           "allow_list": true,
           "order": 6
@@ -126,77 +104,59 @@
         "last_seen_before": {
           "description": "Last seen after date and time (UTC) or duration inclusive",
           "data_type": "string",
-          "required": false,
-          "primary": false,
           "order": 7
         },
         "last_seen_after": {
           "description": "Last seen before date and time (UTC) or duration exclusive",
           "data_type": "string",
-          "required": false,
-          "primary": false,
           "order": 8
         },
         "ids": {
           "description": "Get endpoints having any of the specified ids (comma separated)",
           "data_type": "string",
-          "required": false,
-          "primary": false,
           "allow_list": true,
           "order": 9
         },
         "fields": {
           "description": "The fields to return in a partial response",
           "data_type": "string",
-          "required": false,
-          "primary": false,
           "order": 10
         },
         "view": {
           "description": "Type of view to be returned in response",
           "data_type": "string",
-          "required": false,
           "value_list": [
-             "basic",
-             "summary",
-             "full"
+            "basic",
+            "summary",
+            "full"
           ],
-          "primary": false,
           "order": 11
         },
         "search": {
           "description": "Term to search for in the specified search fields",
           "data_type": "string",
-          "required": false,
-          "primary": false,
           "order": 12
         },
         "search_fields": {
           "description": "List of search fields for finding the given search term (comma separated). Defaults to all applicable fields",
-          "verbose": "Values allowed: hostname, groupName, associatedPersonName, ipAddresses",
           "data_type": "string",
-          "required": false,
-          "primary": false,
           "allow_list": true,
           "order": 13
         }
       },
-      "output": [{
+      "output": [
+        {
           "data_path": "action_result.status",
           "data_type": "string",
-          "column_name": "status",
-          "column_order": 0
+          "column_name": "Status",
+          "column_order": 0,
+          "example_values": [
+            "success",
+            "failed"
+          ]
         },
         {
-          "data_path": "action_result.parameter.page_from_key",
-          "data_type": "string"
-        },
-        {
-          "data_path": "action_result.parameter.page_size",
-          "data_type": "string"
-        },
-        {
-          "data_path": "action_result.parameter.sort",
+          "data_path": "action_result.parameter.fields",
           "data_type": "string"
         },
         {
@@ -204,19 +164,7 @@
           "data_type": "string"
         },
         {
-          "data_path": "action_result.parameter.type",
-          "data_type": "string"
-        },
-        {
-          "data_path": "action_result.parameter.tamper_protection_enabled",
-          "data_type": "string"
-        },
-        {
-          "data_path": "action_result.parameter.lockdown_status",
-          "data_type": "string"
-        },
-        {
-          "data_path": "action_result.parameter.last_seen_before",
+          "data_path": "action_result.parameter.ids",
           "data_type": "string"
         },
         {
@@ -224,15 +172,19 @@
           "data_type": "string"
         },
         {
-          "data_path": "action_result.parameter.ids",
+          "data_path": "action_result.parameter.last_seen_before",
           "data_type": "string"
         },
         {
-          "data_path": "action_result.parameter.fields",
+          "data_path": "action_result.parameter.lockdown_status",
           "data_type": "string"
         },
         {
-          "data_path": "action_result.parameter.view",
+          "data_path": "action_result.parameter.page_from_key",
+          "data_type": "string"
+        },
+        {
+          "data_path": "action_result.parameter.page_size",
           "data_type": "string"
         },
         {
@@ -244,44 +196,76 @@
           "data_type": "string"
         },
         {
-          "data_path": "action_result.data.*.id",
-          "data_type": "string",
-          "column_name": "id",
-          "example_values": ["3fa85f64-5717-4562-b3fc-2c963f66afa6"],
-          "column_order": 1
+          "data_path": "action_result.parameter.sort",
+          "data_type": "string"
         },
         {
-          "data_path": "action_result.data.*.type",
-          "data_type": "string",
-          "example_values": ["computer"]
+          "data_path": "action_result.parameter.tamper_protection_enabled",
+          "data_type": "string"
         },
         {
-          "data_path": "action_result.data.*.tenant.id",
-          "data_type": "string",
-          "example_values": ["3fa85f64-5717-4562-b3fc-2c963f66afa6"]
+          "data_path": "action_result.parameter.type",
+          "data_type": "string"
         },
         {
-          "data_path": "action_result.data.*.hostname",
+          "data_path": "action_result.parameter.view",
+          "data_type": "string"
+        },
+        {
+          "data_path": "action_result.data.*.assignedProducts.*.code",
           "data_type": "string",
-          "column_name": "hostname",
+          "example_values": [
+            "coreAgent"
+          ]
+        },
+        {
+          "data_path": "action_result.data.*.assignedProducts.*.status",
+          "data_type": "string",
+          "example_values": [
+            "installed"
+          ]
+        },
+        {
+          "data_path": "action_result.data.*.assignedProducts.*.version",
+          "data_type": "string"
+        },
+        {
+          "data_path": "action_result.data.*.associatedPerson.id",
+          "data_type": "string",
+          "column_name": "Associated Person ID",
+          "column_order": 9
+        },
+        {
+          "data_path": "action_result.data.*.associatedPerson.viaLogin",
+          "data_type": "string",
+          "column_name": "Vialogin",
+          "column_order": 10
+        },
+        {
+          "data_path": "action_result.data.*.encryption.volumes.*.status",
+          "data_type": "string",
+          "example_values": [
+            "notEncrypted"
+          ]
+        },
+        {
+          "data_path": "action_result.data.*.encryption.volumes.*.volumeId",
+          "data_type": "string"
+        },
+        {
+          "data_path": "action_result.data.*.group.name",
+          "data_type": "string",
+          "column_name": "Group",
           "column_order": 5
         },
         {
           "data_path": "action_result.data.*.health.overall",
           "data_type": "string",
-          "column_name": "overall health",
-          "example_values": ["good"],
+          "column_name": "Overall Health",
+          "example_values": [
+            "good"
+          ],
           "column_order": 4
-        },
-        {
-          "data_path": "action_result.data.*.health.threats.status",
-          "data_type": "string",
-          "example_values": ["good"]
-        },
-        {
-          "data_path": "action_result.data.*.health.services.status",
-          "data_type": "string",
-          "example_values": ["good"]
         },
         {
           "data_path": "action_result.data.*.health.services.serviceDetails.*.name",
@@ -290,42 +274,38 @@
         {
           "data_path": "action_result.data.*.health.services.serviceDetails.*.status",
           "data_type": "string",
-          "example_values": ["running"]
-        },
-        {
-          "data_path": "action_result.data.*.os.isServer",
-          "data_type": "boolean",
-          "example_values": [true, false]
-        },
-        {
-          "data_path": "action_result.data.*.os.name",
-          "data_type": "string",
-          "column_name": "OS Name",
-          "column_order": 2
-        },
-        {
-          "data_path": "action_result.data.*.os.platform",
-          "data_type": "string",
-          "column_name": "platform",
           "example_values": [
-            "windows"
+            "running"
+          ]
+        },
+        {
+          "data_path": "action_result.data.*.health.services.status",
+          "data_type": "string",
+          "example_values": [
+            "good"
+          ]
+        },
+        {
+          "data_path": "action_result.data.*.health.threats.status",
+          "data_type": "string",
+          "example_values": [
+            "good"
+          ]
+        },
+        {
+          "data_path": "action_result.data.*.hostname",
+          "data_type": "string",
+          "column_name": "Hostname",
+          "column_order": 6
+        },
+        {
+          "data_path": "action_result.data.*.id",
+          "data_type": "string",
+          "column_name": "ID",
+          "example_values": [
+            "3fa85f64-5717-4562-b3fc-2c963f66afa6"
           ],
-          "column_order": 3
-        },
-        {
-          "data_path": "action_result.data.*.os.majorVersion",
-          "data_type": "numeric",
-          "example_values": [0]
-        },
-        {
-          "data_path": "action_result.data.*.os.minorVersion",
-          "data_type": "numeric",
-          "example_values": [0]
-        },
-        {
-          "data_path": "action_result.data.*.os.build",
-          "data_type": "numeric",
-          "example_values": [0]
+          "column_order": 1
         },
         {
           "data_path": "action_result.data.*.ipv4Addresses",
@@ -336,77 +316,106 @@
           "data_type": "string"
         },
         {
-          "data_path": "action_result.data.*.macAddresses",
-          "data_type": "string",
-          "column_name": "MAC Addresses",
-          "column_order": 7
-        },
-        {
-          "data_path": "action_result.data.*.group.name",
-          "data_type": "string",
-          "column_name": "group",
-          "column_order": 5
-        },
-        {
-          "data_path": "action_result.data.*.associatedPerson.id",
-          "data_type": "string",
-          "column_name": "Associated Person ID",
-          "column_order": 8
-        },
-        {
-          "data_path": "action_result.data.*.associatedPerson.viaLogin",
-          "data_type": "string",
-          "column_name": "vialogin",
-          "column_order": 9
-        },
-        {
-          "data_path": "action_result.data.*.tamperProtectionEnabled",
-          "data_type": "boolean",
-          "example_values": [true, false]
-        },
-        {
-          "data_path": "action_result.data.*.assignedProducts.*.code",
-          "data_type": "string",
-          "example_values": ["coreAgent"]
-        },
-        {
-          "data_path": "action_result.data.*.assignedProducts.*.version",
-          "data_type": "string"
-        },
-        {
-          "data_path": "action_result.data.*.assignedProducts.*.status",
-          "data_type": "string",
-          "example_values": ["installed"]
-        },
-        {
           "data_path": "action_result.data.*.lastSeenAt",
           "data_type": "string",
-          "column_name": "last seen",
-          "example_values": ["2019-09-23T12:02:01.700Z"],
-          "column_order": 6
-        },
-        {
-          "data_path": "action_result.data.*.encryption.volumes.*.volumeId",
-          "data_type": "string"
-        },
-        {
-          "data_path": "action_result.data.*.encryption.volumes.*.status",
-          "data_type": "string",
-          "example_values": ["notEncrypted"]
+          "column_name": "Last Seen",
+          "example_values": [
+            "2019-09-23T12:02:01.700Z"
+          ],
+          "column_order": 7
         },
         {
           "data_path": "action_result.data.*.lockdown.status",
           "data_type": "string",
-          "example_values": ["creatingWhitelist"]
+          "example_values": [
+            "creatingWhitelist"
+          ]
         },
         {
           "data_path": "action_result.data.*.lockdown.updateStatus",
           "data_type": "string",
-          "example_values": ["upToDate"]
+          "example_values": [
+            "upToDate"
+          ]
+        },
+        {
+          "data_path": "action_result.data.*.macAddresses",
+          "data_type": "string",
+          "column_name": "MAC Addresses",
+          "column_order": 8
+        },
+        {
+          "data_path": "action_result.data.*.os.build",
+          "data_type": "numeric",
+          "example_values": [
+            0
+          ]
+        },
+        {
+          "data_path": "action_result.data.*.os.isServer",
+          "data_type": "boolean",
+          "example_values": [
+            true,
+            false
+          ]
+        },
+        {
+          "data_path": "action_result.data.*.os.majorVersion",
+          "data_type": "numeric",
+          "example_values": [
+            0
+          ]
+        },
+        {
+          "data_path": "action_result.data.*.os.minorVersion",
+          "data_type": "numeric",
+          "example_values": [
+            0
+          ]
+        },
+        {
+          "data_path": "action_result.data.*.os.name",
+          "data_type": "string",
+          "column_name": "OS Name",
+          "column_order": 2
+        },
+        {
+          "data_path": "action_result.data.*.os.platform",
+          "data_type": "string",
+          "column_name": "Platform",
+          "example_values": [
+            "windows"
+          ],
+          "column_order": 3
+        },
+        {
+          "data_path": "action_result.data.*.tamperProtectionEnabled",
+          "data_type": "boolean",
+          "example_values": [
+            true,
+            false
+          ]
+        },
+        {
+          "data_path": "action_result.data.*.tenant.id",
+          "data_type": "string",
+          "example_values": [
+            "3fa85f64-5717-4562-b3fc-2c963f66afa6"
+          ]
+        },
+        {
+          "data_path": "action_result.data.*.type",
+          "data_type": "string",
+          "example_values": [
+            "computer"
+          ]
         },
         {
           "data_path": "action_result.summary.total_number_of_items",
-          "data_type": "numeric"
+          "data_type": "numeric",
+          "example_values": [
+            1
+          ]
         },
         {
           "data_path": "action_result.message",
@@ -414,11 +423,17 @@
         },
         {
           "data_path": "summary.total_objects",
-          "data_type": "numeric"
+          "data_type": "numeric",
+          "example_values": [
+            1
+          ]
         },
         {
           "data_path": "summary.total_objects_successful",
-          "data_type": "numeric"
+          "data_type": "numeric",
+          "example_values": [
+            1
+          ]
         }
       ],
       "render": {
@@ -437,42 +452,53 @@
           "description": "The endpoint ID",
           "data_type": "string",
           "required": true,
-          "primary": true,
           "order": 0
         }
       },
-      "output": [{
+      "output": [
+        {
+          "data_path": "action_result.status",
+          "data_type": "string",
+          "column_name": "Status",
+          "example_values": [
+            "success",
+            "failed"
+          ]
+        },
+        {
           "data_path": "action_result.parameter.endpointid",
           "data_type": "string",
           "column_name": "Endpoint ID",
           "column_order": 0
         },
         {
-          "data_path": "action_result.status",
-          "data_type": "string",
-          "column_name": "status"
-        },
-        {
           "data_path": "action_result.data.*.id",
           "data_type": "string",
-          "example_values": ["3fa85f64-5717-4562-b3fc-2c963f66afa6"]
-        },
-        {
-          "data_path": "action_result.data.*.status",
-          "data_type": "string",
-          "example_values": ["requested"],
-          "column_name": "status",
-          "column_order": 1
+          "example_values": [
+            "3fa85f64-5717-4562-b3fc-2c963f66afa6"
+          ]
         },
         {
           "data_path": "action_result.data.*.requestedAt",
           "data_type": "string",
-          "column_name": "Time of request",
+          "column_name": "Time Of Request",
           "column_order": 2
         },
         {
+          "data_path": "action_result.data.*.status",
+          "data_type": "string",
+          "example_values": [
+            "requested"
+          ],
+          "column_name": "Status",
+          "column_order": 1
+        },
+        {
           "data_path": "action_result.summary.number_of_endpoints_checked",
-          "data_type": "numeric"
+          "data_type": "numeric",
+          "example_values": [
+            1
+          ]
         },
         {
           "data_path": "action_result.message",
@@ -480,11 +506,17 @@
         },
         {
           "data_path": "summary.total_objects",
-          "data_type": "numeric"
+          "data_type": "numeric",
+          "example_values": [
+            1
+          ]
         },
         {
           "data_path": "summary.total_objects_successful",
-          "data_type": "numeric"
+          "data_type": "numeric",
+          "example_values": [
+            1
+          ]
         }
       ],
       "render": {
@@ -496,7 +528,7 @@
       "action": "tamper protection switch",
       "identifier": "tamper_protection_switch",
       "description": "Turn Tamper Protection on or off on the endpoint",
-      "verbose": "Turn Tamper Protection on or off on the endpoint or generate a new Tamper Protection password. Note that Tamper Protection can be enabled for an endpoint only if it has also been enabled globally",
+      "verbose": "Turn Tamper Protection on or off on the endpoint or generate a new Tamper Protection password. Note that Tamper Protection can be enabled for an endpoint only if it has also been enabled globally.",
       "read_only": false,
       "type": "contain",
       "parameters": {
@@ -504,27 +536,39 @@
           "description": "The endpoint ID",
           "data_type": "string",
           "required": true,
-          "primary": true,
           "order": 0
         },
         "enabled": {
           "description": "Whether Tamper Protection should be turned on for the endpoint",
           "data_type": "boolean",
-          "required": true,
-          "primary": false,
           "default": "true",
           "order": 1
         },
         "regenerate_password": {
           "description": "Whether a new Tamper Protection password should be generated",
           "data_type": "boolean",
-          "required": false,
-          "primary": false,
           "default": "false",
           "order": 2
         }
       },
-      "output": [{
+      "output": [
+        {
+          "data_path": "action_result.status",
+          "data_type": "string",
+          "example_values": [
+            "success",
+            "failed"
+          ]
+        },
+        {
+          "data_path": "action_result.parameter.enabled",
+          "data_type": "boolean",
+          "example_values": [
+            true,
+            false
+          ]
+        },
+        {
           "data_path": "action_result.parameter.endpointid",
           "data_type": "string",
           "column_name": "Endpoint ID",
@@ -533,17 +577,15 @@
         {
           "data_path": "action_result.parameter.regenerate_password",
           "data_type": "boolean",
-          "example_values": [true, false]
-        },
-        {
-          "data_path": "action_result.parameter.enabled",
-          "data_type": "boolean",
-          "example_values": [true, false]
+          "example_values": [
+            true,
+            false
+          ]
         },
         {
           "data_path": "action_result.data.*.enabled",
           "data_type": "boolean",
-          "column_name": "enabled",
+          "column_name": "Enabled",
           "column_order": 1
         },
         {
@@ -551,20 +593,19 @@
           "data_type": "password"
         },
         {
-          "data_path": "action_result.data.*.previousPasswords.*.password",
-          "data_type": "password"
-        },
-        {
           "data_path": "action_result.data.*.previousPasswords.*.invalidatedAt",
           "data_type": "string"
         },
         {
-          "data_path": "action_result.summary.number_of_endpoints_tamperprotection_settings_updated",
-          "data_type": "numeric"
+          "data_path": "action_result.data.*.previousPasswords.*.password",
+          "data_type": "password"
         },
         {
-          "data_path": "action_result.status",
-          "data_type": "string"
+          "data_path": "action_result.summary.number_of_endpoints_tamperprotection_settings_updated",
+          "data_type": "numeric",
+          "example_values": [
+            1
+          ]
         },
         {
           "data_path": "action_result.message",
@@ -572,11 +613,17 @@
         },
         {
           "data_path": "summary.total_objects",
-          "data_type": "numeric"
+          "data_type": "numeric",
+          "example_values": [
+            1
+          ]
         },
         {
           "data_path": "summary.total_objects_successful",
-          "data_type": "numeric"
+          "data_type": "numeric",
+          "example_values": [
+            1
+          ]
         }
       ],
       "render": {
@@ -595,11 +642,20 @@
           "description": "The endpoint ID",
           "data_type": "string",
           "required": true,
-          "primary": true,
           "order": 0
         }
       },
-      "output": [{
+      "output": [
+        {
+          "data_path": "action_result.status",
+          "data_type": "string",
+          "column_name": "Status",
+          "example_values": [
+            "success",
+            "failed"
+          ]
+        },
+        {
           "data_path": "action_result.parameter.endpointid",
           "data_type": "string",
           "column_name": "Endpoint ID",
@@ -608,8 +664,11 @@
         {
           "data_path": "action_result.data.*.enabled",
           "data_type": "boolean",
-          "example_values": [true, false],
-          "column_name": "enabled",
+          "example_values": [
+            true,
+            false
+          ],
+          "column_name": "Enabled",
           "column_order": 1
         },
         {
@@ -617,12 +676,12 @@
           "data_type": "password"
         },
         {
-          "data_path": "action_result.data.*.previousPasswords.*.password",
-          "data_type": "password"
-        },
-        {
           "data_path": "action_result.data.*.previousPasswords.*.invalidatedAt",
           "data_type": "string"
+        },
+        {
+          "data_path": "action_result.data.*.previousPasswords.*.password",
+          "data_type": "password"
         },
         {
           "data_path": "action_result.summary.number_of_endpoints_tamperprotection_settings_received",
@@ -630,12 +689,10 @@
         },
         {
           "data_path": "action_result.summary.number_of_times_passwords_changed",
-          "data_type": "numeric"
-        },
-        {
-          "data_path": "action_result.status",
-          "data_type": "string",
-          "column_name": "status"
+          "data_type": "numeric",
+          "example_values": [
+            1
+          ]
         },
         {
           "data_path": "action_result.message",
@@ -643,11 +700,17 @@
         },
         {
           "data_path": "summary.total_objects",
-          "data_type": "numeric"
+          "data_type": "numeric",
+          "example_values": [
+            1
+          ]
         },
         {
           "data_path": "summary.total_objects_successful",
-          "data_type": "numeric"
+          "data_type": "numeric",
+          "example_values": [
+            1
+          ]
         }
       ],
       "render": {
@@ -666,35 +729,46 @@
           "description": "The endpoint ID",
           "data_type": "string",
           "required": true,
-          "primary": false,
           "order": 0
         }
       },
-      "output": [{
+      "output": [
+        {
+          "data_path": "action_result.status",
+          "data_type": "string",
+          "example_values": [
+            "success",
+            "failed"
+          ]
+        },
+        {
           "data_path": "action_result.parameter.endpointid",
           "data_type": "string",
-          "column_name": "endpoint id",
+          "column_name": "Endpoint ID",
           "column_order": 0
         },
         {
           "data_path": "action_result.data.*.id",
           "data_type": "string",
-          "example_values": ["3fa85f64-5717-4562-b3fc-2c963f66afa6"]
+          "example_values": [
+            "3fa85f64-5717-4562-b3fc-2c963f66afa6"
+          ]
         },
         {
           "data_path": "action_result.data.*.status",
           "data_type": "string",
-          "example_values": ["requested"],
-          "column_name": "status",
+          "example_values": [
+            "requested"
+          ],
+          "column_name": "Status",
           "column_order": 1
         },
         {
-          "data_path": "action_result.status",
-          "data_type": "string"
-        },
-        {
           "data_path": "action_result.summary.number_of_scans_performed",
-          "data_type": "numeric"
+          "data_type": "numeric",
+          "example_values": [
+            1
+          ]
         },
         {
           "data_path": "action_result.message",
@@ -702,11 +776,17 @@
         },
         {
           "data_path": "summary.total_objects",
-          "data_type": "numeric"
+          "data_type": "numeric",
+          "example_values": [
+            1
+          ]
         },
         {
           "data_path": "summary.total_objects_successful",
-          "data_type": "numeric"
+          "data_type": "numeric",
+          "example_values": [
+            1
+          ]
         }
       ],
       "render": {
@@ -725,41 +805,54 @@
           "description": "The endpoint ID",
           "data_type": "string",
           "required": true,
-          "primary": false,
           "order": 0
         }
       },
-      "output": [{
-          "data_path": "action_result.parameter.endpointid",
-          "data_type": "string",
-          "column_name": "endpointid",
-          "column_order": 0
-        },
+      "output": [
         {
           "data_path": "action_result.status",
           "data_type": "string",
-          "column_name": "status",
-          "column_order": 1
+          "column_name": "Status",
+          "column_order": 1,
+          "example_values": [
+            "success",
+            "failed"
+          ]
         },
         {
-          "data_path": "action_result.message",
-          "data_type": "string"
-        },
-        {
-          "data_path": "action_result.summary.total_endpoints_deleted",
-          "data_type": "numeric"
+          "data_path": "action_result.parameter.endpointid",
+          "data_type": "string",
+          "column_name": "Endpointid",
+          "column_order": 0
         },
         {
           "data_path": "action_result.data.*.endpoint_deleted",
           "data_type": "string"
         },
         {
+          "data_path": "action_result.summary.total_endpoints_deleted",
+          "data_type": "numeric",
+          "example_values": [
+            1
+          ]
+        },
+        {
+          "data_path": "action_result.message",
+          "data_type": "string"
+        },
+        {
           "data_path": "summary.total_objects",
-          "data_type": "numeric"
+          "data_type": "numeric",
+          "example_values": [
+            1
+          ]
         },
         {
           "data_path": "summary.total_objects_successful",
-          "data_type": "numeric"
+          "data_type": "numeric",
+          "example_values": [
+            1
+          ]
         }
       ],
       "render": {
@@ -778,22 +871,17 @@
           "description": "The endpoint ID",
           "data_type": "string",
           "required": true,
-          "primary": false,
           "order": 0
         },
         "fields": {
           "description": "The fields to return in a partial response",
           "data_type": "string",
-          "required": false,
-          "primary": false,
           "allow_list": true,
           "order": 1
         },
         "view": {
           "description": "Type of view to be returned in response",
           "data_type": "string",
-          "required": false,
-          "primary": false,
           "value_list": [
             "basic",
             "summary",
@@ -802,118 +890,63 @@
           "order": 2
         }
       },
-      "output": [{
+      "output": [
+        {
+          "data_path": "action_result.status",
+          "data_type": "string",
+          "column_name": "Status",
+          "column_order": 3,
+          "example_values": [
+            "success",
+            "failed"
+          ]
+        },
+        {
           "data_path": "action_result.parameter.endpointid",
           "data_type": "string",
-          "column_name": "endpointid",
+          "column_name": "Endpointid",
           "column_order": 0
         },
         {
           "data_path": "action_result.parameter.fields",
           "data_type": "string",
-          "column_name": "fields",
+          "column_name": "Fields",
           "column_order": 1
         },
         {
           "data_path": "action_result.parameter.view",
           "data_type": "string",
-          "column_name": "view",
-          "example_values": ["basic", "summary", "full"],
+          "column_name": "View",
+          "example_values": [
+            "basic",
+            "summary",
+            "full"
+          ],
           "column_order": 2
         },
         {
-          "data_path": "action_result.status",
+          "data_path": "action_result.data.*.assignedProducts.*.code",
           "data_type": "string",
-          "column_name": "status",
-          "column_order": 3
+          "example_values": [
+            "coreAgent",
+            "interceptX",
+            "endpointProtection",
+            "deviceEncryption",
+            "mtr",
+            "mtd",
+            "ztna"
+          ]
         },
         {
-          "data_path": "action_result.data.*.id",
+          "data_path": "action_result.data.*.assignedProducts.*.status",
           "data_type": "string",
-          "example_values": ["3fa85f64-5717-4562-b3fc-2c963f66afa6"]
+          "example_values": [
+            "installed",
+            "notInstalled"
+          ]
         },
         {
-          "data_path": "action_result.data.*.type",
-          "data_type": "string",
-          "example_values": ["computer"]
-        },
-        {
-          "data_path": "action_result.data.*.tenant.id",
-          "data_type": "string",
-          "example_values": ["3fa85f64-5717-4562-b3fc-2c963f66afa6"]
-        },
-        {
-          "data_path": "action_result.data.*.hostname",
-          "data_type": "string"
-        },
-        {
-          "data_path": "action_result.data.*.health.overall",
-          "data_type": "string",
-          "example_values":  ["good", "suspicious", "bad", "unknown"]
-        },
-        {
-          "data_path": "action_result.data.*.health.threats.status",
-          "data_type": "string",
-          "example_values":  ["good", "suspicious", "bad", "unknown"]
-        },
-        {
-          "data_path": "action_result.data.*.health.services.status",
-          "data_type": "string",
-          "example_values": ["good", "suspicious", "bad", "unknown"]
-        },
-        {
-          "data_path": "action_result.data.*.health.services.serviceDetails.*.name",
-          "data_type": "string"
-        },
-        {
-          "data_path": "action_result.data.*.health.services.serviceDetails.*.status",
-          "data_type": "string",
-          "example_values": ["running", "stopped", "missing"]
-        },
-        {
-          "data_path": "action_result.data.*.os.isServer",
-          "data_type": "boolean",
-          "example_values": [true, false]
-        },
-        {
-          "data_path": "action_result.data.*.os.platform",
-          "data_type": "string",
-          "example_values": ["windows", "linux", "macOS"]
-        },
-        {
-          "data_path": "action_result.data.*.os.name",
-          "data_type": "string"
-        },
-        {
-          "data_path": "action_result.data.*.os.majorVersion",
-          "data_type": "numeric"
-        },
-        {
-          "data_path": "action_result.data.*.os.minorVersion",
-          "data_type": "numeric"
-        },
-        {
-          "data_path": "action_result.data.*.os.build",
-          "data_type": "numeric"
-        },
-        {
-          "data_path": "action_result.data.*.ipv4Addresses",
-          "data_type": "string"
-        },
-        {
-          "data_path": "action_result.data.*.ipv6Addresses",
-          "data_type": "string"
-        },
-        {
-          "data_path": "action_result.data.*.macAddresses",
-          "data_type": "string"
-        },
-        {
-          "data_path": "action_result.data.*.group.name",
-          "data_type": "string"
-        },
-        {
-          "data_path": "action_result.data.*.group.id",
+          "data_path": "action_result.data.*.assignedProducts.*.version",
           "data_type": "string"
         },
         {
@@ -925,55 +958,101 @@
           "data_type": "string"
         },
         {
-          "data_path": "action_result.data.*.tamperProtectionEnabled",
-          "data_type": "boolean",
-          "example_values": [true, false]
-        },
-        {
-          "data_path": "action_result.data.*.assignedProducts.*.code",
-          "data_type": "string",
-          "example_values": ["coreAgent", "interceptX", "endpointProtection", "deviceEncryption", "mtr", "mtd", "ztna"]
-        },
-        {
-          "data_path": "action_result.data.*.assignedProducts.*.version",
+          "data_path": "action_result.data.*.cloud.instanceId",
           "data_type": "string"
         },
         {
-          "data_path": "action_result.data.*.assignedProducts.*.status",
+          "data_path": "action_result.data.*.cloud.provider",
           "data_type": "string",
-          "example_values": ["installed", "notInstalled"]
+          "example_values": [
+            "aws",
+            "azure"
+          ]
         },
         {
-          "data_path": "action_result.data.*.lastSeenAt",
+          "data_path": "action_result.data.*.encryption.volumes.*.status",
           "data_type": "string",
-          "example_values": ["2019-09-23T12:02:01.700Z"]
+          "example_values": [
+            "notEncrypted",
+            "encrypted",
+            "encrypting",
+            "notSupported",
+            "suspended",
+            "unknown"
+          ]
         },
         {
           "data_path": "action_result.data.*.encryption.volumes.*.volumeId",
           "data_type": "string"
         },
         {
-          "data_path": "action_result.data.*.encryption.volumes.*.status",
-          "data_type": "string",
-          "example_values": ["notEncrypted", "encrypted", "encrypting", "notSupported", "suspended", "unknown"]
+          "data_path": "action_result.data.*.group.id",
+          "data_type": "string"
         },
         {
-          "data_path": "action_result.data.*.lockdown.status",
-          "data_type": "string",
-          "example_values": ["creatingWhitelist", "installing", "locked", "notInstalled", "registering", "starting", "stopping", "unavailable", "uninstalled", "unlocked"]
+          "data_path": "action_result.data.*.group.name",
+          "data_type": "string"
         },
         {
-          "data_path": "action_result.data.*.lockdown.updateStatus",
+          "data_path": "action_result.data.*.health.overall",
           "data_type": "string",
-          "example_values": ["upToDate", "updating", "rebootRequired", "notInstalled"]
+          "example_values": [
+            "good",
+            "suspicious",
+            "bad",
+            "unknown"
+          ]
         },
         {
-          "data_path": "action_result.data.*.cloud.provider",
-          "data_type": "string",
-          "example_values": ["aws", "azure"]
+          "data_path": "action_result.data.*.health.services.serviceDetails.*.name",
+          "data_type": "string"
         },
         {
-          "data_path": "action_result.data.*.cloud.instanceId",
+          "data_path": "action_result.data.*.health.services.serviceDetails.*.status",
+          "data_type": "string",
+          "example_values": [
+            "running",
+            "stopped",
+            "missing"
+          ]
+        },
+        {
+          "data_path": "action_result.data.*.health.services.status",
+          "data_type": "string",
+          "example_values": [
+            "good",
+            "suspicious",
+            "bad",
+            "unknown"
+          ]
+        },
+        {
+          "data_path": "action_result.data.*.health.threats.status",
+          "data_type": "string",
+          "example_values": [
+            "good",
+            "suspicious",
+            "bad",
+            "unknown"
+          ]
+        },
+        {
+          "data_path": "action_result.data.*.hostname",
+          "data_type": "string"
+        },
+        {
+          "data_path": "action_result.data.*.id",
+          "data_type": "string",
+          "example_values": [
+            "3fa85f64-5717-4562-b3fc-2c963f66afa6"
+          ]
+        },
+        {
+          "data_path": "action_result.data.*.ipv4Addresses",
+          "data_type": "string"
+        },
+        {
+          "data_path": "action_result.data.*.ipv6Addresses",
           "data_type": "string"
         },
         {
@@ -985,8 +1064,103 @@
           ]
         },
         {
-          "data_path": "action_result.summary.total_number_of_items",
+          "data_path": "action_result.data.*.lastSeenAt",
+          "data_type": "string",
+          "example_values": [
+            "2019-09-23T12:02:01.700Z"
+          ]
+        },
+        {
+          "data_path": "action_result.data.*.lockdown.status",
+          "data_type": "string",
+          "example_values": [
+            "creatingWhitelist",
+            "installing",
+            "locked",
+            "notInstalled",
+            "registering",
+            "starting",
+            "stopping",
+            "unavailable",
+            "uninstalled",
+            "unlocked"
+          ]
+        },
+        {
+          "data_path": "action_result.data.*.lockdown.updateStatus",
+          "data_type": "string",
+          "example_values": [
+            "upToDate",
+            "updating",
+            "rebootRequired",
+            "notInstalled"
+          ]
+        },
+        {
+          "data_path": "action_result.data.*.macAddresses",
+          "data_type": "string"
+        },
+        {
+          "data_path": "action_result.data.*.os.build",
           "data_type": "numeric"
+        },
+        {
+          "data_path": "action_result.data.*.os.isServer",
+          "data_type": "boolean",
+          "example_values": [
+            true,
+            false
+          ]
+        },
+        {
+          "data_path": "action_result.data.*.os.majorVersion",
+          "data_type": "numeric"
+        },
+        {
+          "data_path": "action_result.data.*.os.minorVersion",
+          "data_type": "numeric"
+        },
+        {
+          "data_path": "action_result.data.*.os.name",
+          "data_type": "string"
+        },
+        {
+          "data_path": "action_result.data.*.os.platform",
+          "data_type": "string",
+          "example_values": [
+            "windows",
+            "linux",
+            "macOS"
+          ]
+        },
+        {
+          "data_path": "action_result.data.*.tamperProtectionEnabled",
+          "data_type": "boolean",
+          "example_values": [
+            true,
+            false
+          ]
+        },
+        {
+          "data_path": "action_result.data.*.tenant.id",
+          "data_type": "string",
+          "example_values": [
+            "3fa85f64-5717-4562-b3fc-2c963f66afa6"
+          ]
+        },
+        {
+          "data_path": "action_result.data.*.type",
+          "data_type": "string",
+          "example_values": [
+            "computer"
+          ]
+        },
+        {
+          "data_path": "action_result.summary.total_number_of_items",
+          "data_type": "numeric",
+          "example_values": [
+            1
+          ]
         },
         {
           "data_path": "action_result.message",
@@ -994,11 +1168,17 @@
         },
         {
           "data_path": "summary.total_objects",
-          "data_type": "numeric"
+          "data_type": "numeric",
+          "example_values": [
+            1
+          ]
         },
         {
           "data_path": "summary.total_objects_successful",
-          "data_type": "numeric"
+          "data_type": "numeric",
+          "example_values": [
+            1
+          ]
         }
       ],
       "render": {
@@ -1016,29 +1196,42 @@
         "page": {
           "description": "The page number to fetch, starting with 1",
           "data_type": "numeric",
-          "required": false,
-          "primary": false,
           "default": 1,
           "order": 0
         },
         "page_size": {
           "description": "The size of the page requested",
           "data_type": "numeric",
-          "required": false,
-          "primary": false,
           "default": 50,
           "order": 1
         },
         "items_type": {
           "description": "Specifies the type of items to be fetched: blocked or allowed",
-          "data_type":"string",
+          "data_type": "string",
           "required": true,
-          "value_list": ["blocked", "allowed"],
+          "value_list": [
+            "blocked",
+            "allowed"
+          ],
           "default": "blocked",
           "order": 2
         }
       },
       "output": [
+        {
+          "data_path": "action_result.status",
+          "data_type": "string",
+          "column_name": "Status",
+          "column_order": 0,
+          "example_values": [
+            "success",
+            "failed"
+          ]
+        },
+        {
+          "data_path": "action_result.parameter.items_type",
+          "data_type": "string"
+        },
         {
           "data_path": "action_result.parameter.page",
           "data_type": "numeric"
@@ -1048,20 +1241,10 @@
           "data_type": "numeric"
         },
         {
-          "data_path": "action_result.parameter.items_type",
-          "data_type": "string"
-        },
-        {
-          "data_path": "action_result.status",
+          "data_path": "action_result.data.*.comment",
           "data_type": "string",
-          "column_name": "status",
-          "column_order": 0
-        },
-        {
-          "data_path": "action_result.data.*.id",
-          "data_type": "string",
-          "column_name": "ID",
-          "column_order": 1
+          "column_name": "Comment",
+          "column_order": 4
         },
         {
           "data_path": "action_result.data.*.createdAt",
@@ -1070,22 +1253,29 @@
           "column_order": 2
         },
         {
-          "data_path": "action_result.data.*.properties.sha256",
+          "data_path": "action_result.data.*.id",
           "data_type": "string",
-          "column_name": "sha256",
-          "column_order": 3
+          "column_name": "ID",
+          "column_order": 1
         },
         {
-          "data_path": "action_result.data.*.comment",
+          "data_path": "action_result.data.*.properties.sha256",
           "data_type": "string",
-          "column_name": "comment",
-          "column_order": 4
+          "column_name": "SHA256",
+          "column_order": 3
         },
         {
           "data_path": "action_result.data.*.type",
           "data_type": "string",
-          "column_name": "property type",
+          "column_name": "Property Type",
           "column_order": 5
+        },
+        {
+          "data_path": "action_result.summary.total_number_of_items",
+          "data_type": "numeric",
+          "example_values": [
+            1
+          ]
         },
         {
           "data_path": "action_result.message",
@@ -1093,15 +1283,17 @@
         },
         {
           "data_path": "summary.total_objects",
-          "data_type": "numeric"
+          "data_type": "numeric",
+          "example_values": [
+            1
+          ]
         },
         {
           "data_path": "summary.total_objects_successful",
-          "data_type": "numeric"
-        },
-        {
-          "data_path": "action_result.summary.total_number_of_items",
-          "data_type": "numeric"
+          "data_type": "numeric",
+          "example_values": [
+            1
+          ]
         }
       ],
       "render": {
@@ -1120,7 +1312,6 @@
           "description": "The item ID to be deleted",
           "data_type": "string",
           "required": true,
-          "primary": false,
           "order": 0
         },
         "item_type": {
@@ -1137,6 +1328,16 @@
       },
       "output": [
         {
+          "data_path": "action_result.status",
+          "data_type": "string",
+          "column_name": "Status",
+          "column_order": 0,
+          "example_values": [
+            "success",
+            "failed"
+          ]
+        },
+        {
           "data_path": "action_result.parameter.item_id",
           "data_type": "string"
         },
@@ -1145,32 +1346,32 @@
           "data_type": "string"
         },
         {
-          "data_path": "action_result.status",
-          "data_type": "string",
-          "column_name": "status",
-          "column_order": 0
-        },
-        {
           "data_path": "action_result.data.*.deleted",
           "data_type": "boolean",
-          "column_name": "deleted",
+          "column_name": "Deleted",
           "column_order": 1
-        },
-        {
-          "data_path": "action_result.message",
-          "data_type": "string"
         },
         {
           "data_path": "action_result.summary",
           "data_type": "string"
         },
         {
+          "data_path": "action_result.message",
+          "data_type": "string"
+        },
+        {
           "data_path": "summary.total_objects",
-          "data_type": "numeric"
+          "data_type": "numeric",
+          "example_values": [
+            1
+          ]
         },
         {
           "data_path": "summary.total_objects_successful",
-          "data_type": "numeric"
+          "data_type": "numeric",
+          "example_values": [
+            1
+          ]
         }
       ],
       "render": {
@@ -1182,7 +1383,7 @@
       "action": "block item",
       "identifier": "block_item",
       "description": "Add item to blocked list",
-      "verbose": "Block an item from exoneration by SHA256 checksum",
+      "verbose": "Block an item from exoneration by SHA256 checksum.",
       "type": "investigate",
       "read_only": true,
       "parameters": {
@@ -1205,7 +1406,8 @@
           "contains": [
             "sha256"
           ],
-          "order": 2
+          "order": 2,
+          "primary": true
         },
         "certificate_signer": {
           "description": "The value saved for the certificate signer",
@@ -1223,17 +1425,14 @@
       },
       "output": [
         {
-          "data_path": "action_result.parameter.file_name",
-          "data_type": "string"
-        },
-        {
-          "data_path": "action_result.parameter.path",
-          "data_type": "string"
-        },
-        {
-          "data_path": "action_result.parameter.sha256",
+          "data_path": "action_result.status",
           "data_type": "string",
-          "contains": ["sha256"]
+          "column_name": "Status",
+          "column_order": 0,
+          "example_values": [
+            "success",
+            "failed"
+          ]
         },
         {
           "data_path": "action_result.parameter.certificate_signer",
@@ -1244,16 +1443,25 @@
           "data_type": "string"
         },
         {
-          "data_path": "action_result.status",
-          "data_type": "string",
-          "column_name": "status",
-          "column_order": 0
+          "data_path": "action_result.parameter.file_name",
+          "data_type": "string"
         },
         {
-          "data_path": "action_result.data.*.id",
+          "data_path": "action_result.parameter.path",
+          "data_type": "string"
+        },
+        {
+          "data_path": "action_result.parameter.sha256",
           "data_type": "string",
-          "column_name": "ID",
-          "column_order": 1
+          "contains": [
+            "sha256"
+          ]
+        },
+        {
+          "data_path": "action_result.data.*.comment",
+          "data_type": "string",
+          "column_name": "Comment",
+          "column_order": 5
         },
         {
           "data_path": "action_result.data.*.createdAt",
@@ -1262,39 +1470,47 @@
           "column_order": 2
         },
         {
-          "data_path": "action_result.data.*.properties.sha256",
+          "data_path": "action_result.data.*.id",
           "data_type": "string",
-          "contains": ["sha256"],
-          "column_name": "sha256",
-          "column_order": 3
+          "column_name": "ID",
+          "column_order": 1
         },
         {
           "data_path": "action_result.data.*.properties.certificate_signer",
           "data_type": "string",
-          "column_name": "certificateSigner",
+          "column_name": "Certificatesigner",
           "column_order": 4
         },
         {
-          "data_path": "action_result.data.*.comment",
+          "data_path": "action_result.data.*.properties.sha256",
           "data_type": "string",
-          "column_name": "comment",
-          "column_order": 5
-        },
-        {
-          "data_path": "action_result.message",
-          "data_type": "string"
+          "contains": [
+            "sha256"
+          ],
+          "column_name": "SHA256",
+          "column_order": 3
         },
         {
           "data_path": "action_result.summary",
           "data_type": "string"
         },
         {
+          "data_path": "action_result.message",
+          "data_type": "string"
+        },
+        {
           "data_path": "summary.total_objects",
-          "data_type": "numeric"
+          "data_type": "numeric",
+          "example_values": [
+            1
+          ]
         },
         {
           "data_path": "summary.total_objects_successful",
-          "data_type": "numeric"
+          "data_type": "numeric",
+          "example_values": [
+            1
+          ]
         }
       ],
       "render": {
@@ -1306,7 +1522,7 @@
       "action": "allow item",
       "identifier": "allow_item",
       "description": "Add item to allowed list",
-      "verbose": "Exempt an item from conviction by path, SHA256 checksum or certificate signer",
+      "verbose": "Exempt an item from conviction by path, SHA256 checksum or certificate signer.",
       "type": "investigate",
       "read_only": true,
       "parameters": {
@@ -1341,7 +1557,8 @@
           "contains": [
             "sha256"
           ],
-          "order": 3
+          "order": 3,
+          "primary": true
         },
         "certificate_signer": {
           "description": "The value saved for the certificate signer",
@@ -1359,34 +1576,23 @@
         "origin_person_id": {
           "description": "Person associated with the endpoint where the item to be allowed was last seen",
           "data_type": "string",
-          "required": false,
           "order": 6
         },
         "origin_endpoint_id": {
           "description": "Endpoint where the item to be allowed was last seen",
           "data_type": "string",
-          "required": false,
           "order": 7
         }
       },
       "output": [
         {
-          "data_path": "action_result.parameter.property_type",
-          "data_type": "string"
-        },
-        {
-          "data_path": "action_result.parameter.file_name",
-          "data_type": "string"
-        },
-        {
-          "data_path": "action_result.parameter.path",
-          "data_type": "string"
-        },
-        {
-          "data_path": "action_result.parameter.sha256",
+          "data_path": "action_result.status",
           "data_type": "string",
-          "contains": [
-            "sha256"
+          "column_name": "Status",
+          "column_order": 0,
+          "example_values": [
+            "success",
+            "failed"
           ]
         },
         {
@@ -1398,7 +1604,7 @@
           "data_type": "string"
         },
         {
-          "data_path": "action_result.parameter.origin_person_id",
+          "data_path": "action_result.parameter.file_name",
           "data_type": "string"
         },
         {
@@ -1406,16 +1612,29 @@
           "data_type": "string"
         },
         {
-          "data_path": "action_result.status",
-          "data_type": "string",
-          "column_name": "status",
-          "column_order": 0
+          "data_path": "action_result.parameter.origin_person_id",
+          "data_type": "string"
         },
         {
-          "data_path": "action_result.data.*.id",
+          "data_path": "action_result.parameter.path",
+          "data_type": "string"
+        },
+        {
+          "data_path": "action_result.parameter.property_type",
+          "data_type": "string"
+        },
+        {
+          "data_path": "action_result.parameter.sha256",
           "data_type": "string",
-          "column_name": "ID",
-          "column_order": 1
+          "contains": [
+            "sha256"
+          ]
+        },
+        {
+          "data_path": "action_result.data.*.comment",
+          "data_type": "string",
+          "column_name": "Comment",
+          "column_order": 6
         },
         {
           "data_path": "action_result.data.*.createdAt",
@@ -1424,9 +1643,21 @@
           "column_order": 2
         },
         {
+          "data_path": "action_result.data.*.id",
+          "data_type": "string",
+          "column_name": "ID",
+          "column_order": 1
+        },
+        {
+          "data_path": "action_result.data.*.properties.certificate_signer",
+          "data_type": "string",
+          "column_name": "Certificatesigner",
+          "column_order": 5
+        },
+        {
           "data_path": "action_result.data.*.properties.path",
           "data_type": "string",
-          "column_name": "path",
+          "column_name": "Path",
           "column_order": 3
         },
         {
@@ -1435,36 +1666,30 @@
           "contains": [
             "sha256"
           ],
-          "column_name": "sha256",
+          "column_name": "SHA256",
           "column_order": 4
-        },
-        {
-          "data_path": "action_result.data.*.properties.certificate_signer",
-          "data_type": "string",
-          "column_name": "certificateSigner",
-          "column_order": 5
-        },
-        {
-          "data_path": "action_result.data.*.comment",
-          "data_type": "string",
-          "column_name": "comment",
-          "column_order": 6
-        },
-        {
-          "data_path": "action_result.message",
-          "data_type": "string"
         },
         {
           "data_path": "action_result.summary",
           "data_type": "string"
         },
         {
+          "data_path": "action_result.message",
+          "data_type": "string"
+        },
+        {
           "data_path": "summary.total_objects",
-          "data_type": "numeric"
+          "data_type": "numeric",
+          "example_values": [
+            1
+          ]
         },
         {
           "data_path": "summary.total_objects_successful",
-          "data_type": "numeric"
+          "data_type": "numeric",
+          "example_values": [
+            1
+          ]
         }
       ],
       "render": {
@@ -1482,21 +1707,27 @@
         "page": {
           "description": "The page number to fetch, starting with 1",
           "data_type": "numeric",
-          "required": false,
-          "primary": false,
           "default": 1,
           "order": 0
         },
         "page_size": {
           "description": "The size of the page requested",
           "data_type": "numeric",
-          "required": false,
-          "primary": false,
           "default": 50,
           "order": 1
         }
       },
       "output": [
+        {
+          "data_path": "action_result.status",
+          "data_type": "string",
+          "column_name": "Status",
+          "column_order": 0,
+          "example_values": [
+            "success",
+            "failed"
+          ]
+        },
         {
           "data_path": "action_result.parameter.page",
           "data_type": "string"
@@ -1506,22 +1737,22 @@
           "data_type": "string"
         },
         {
-          "data_path": "action_result.status",
+          "data_path": "action_result.data.*.categoryId",
           "data_type": "string",
-          "column_name": "status",
-          "column_order": 0
+          "column_name": "Category ID",
+          "column_order": 2
+        },
+        {
+          "data_path": "action_result.data.*.comment",
+          "data_type": "string",
+          "column_name": "Comment",
+          "column_order": 5
         },
         {
           "data_path": "action_result.data.*.id",
           "data_type": "string",
           "column_name": "ID",
           "column_order": 1
-        },
-        {
-          "data_path": "action_result.data.*.categoryId",
-          "data_type": "string",
-          "column_name": "category Id",
-          "column_order": 2
         },
         {
           "data_path": "action_result.data.*.tags",
@@ -1532,14 +1763,12 @@
         {
           "data_path": "action_result.data.*.url",
           "data_type": "string",
-          "column_name": "url",
+          "column_name": "URL",
           "column_order": 4
         },
         {
-          "data_path": "action_result.data.*.comment",
-          "data_type": "string",
-          "column_name": "comment",
-          "column_order": 5
+          "data_path": "action_result.summary.total_number_of_items",
+          "data_type": "numeric"
         },
         {
           "data_path": "action_result.message",
@@ -1551,10 +1780,6 @@
         },
         {
           "data_path": "summary.total_objects_successful",
-          "data_type": "numeric"
-        },
-        {
-          "data_path": "action_result.summary.total_number_of_items",
           "data_type": "numeric"
         }
       ],
@@ -1574,42 +1799,51 @@
           "description": "The local site ID",
           "data_type": "string",
           "required": true,
-          "primary": true,
           "order": 0
         }
       },
       "output": [
         {
+          "data_path": "action_result.status",
+          "data_type": "string",
+          "column_name": "Status",
+          "column_order": 0,
+          "example_values": [
+            "success",
+            "failed"
+          ]
+        },
+        {
           "data_path": "action_result.parameter.site_id",
           "data_type": "string"
         },
         {
-          "data_path": "action_result.status",
-          "data_type": "string",
-          "column_name": "status",
-          "column_order": 0
-        },
-        {
           "data_path": "action_result.data.*.deleted",
           "data_type": "boolean",
-          "column_name": "deleted",
+          "column_name": "Deleted",
           "column_order": 1
-        },
-        {
-          "data_path": "action_result.message",
-          "data_type": "string"
         },
         {
           "data_path": "action_result.summary",
           "data_type": "string"
         },
         {
+          "data_path": "action_result.message",
+          "data_type": "string"
+        },
+        {
           "data_path": "summary.total_objects",
-          "data_type": "numeric"
+          "data_type": "numeric",
+          "example_values": [
+            1
+          ]
         },
         {
           "data_path": "summary.total_objects_successful",
-          "data_type": "numeric"
+          "data_type": "numeric",
+          "example_values": [
+            1
+          ]
         }
       ],
       "render": {
@@ -1626,39 +1860,50 @@
       "parameters": {
         "category_id": {
           "description": "The category Id associated with this local site",
-          "verbose": "Either category Id or tags must be provided. Supported value range is [1-57]",
           "data_type": "numeric",
-          "required": false,
           "default": 0,
           "order": 0
         },
         "tags": {
           "description": "An array of tags associated with this local site setting (comma separated)",
-          "verbose": "Either category Id or tags must be provided. Max array length is 50",
           "data_type": "string",
-          "required": false,
           "allow_list": true,
           "order": 1
         },
         "url": {
           "description": "Local site URL",
           "data_type": "string",
-          "contains": ["url"],
+          "contains": [
+            "url"
+          ],
           "required": true,
-          "order": 2
+          "order": 2,
+          "primary": true
         },
         "comment": {
           "description": "Comment indicating why the site should be added",
-          "verbose": "Max digits supported are 300",
           "data_type": "string",
-          "required": false,
           "order": 3
         }
       },
       "output": [
         {
+          "data_path": "action_result.status",
+          "data_type": "string",
+          "column_name": "Status",
+          "column_order": 0,
+          "example_values": [
+            "success",
+            "failed"
+          ]
+        },
+        {
           "data_path": "action_result.parameter.category_id",
           "data_type": "numeric"
+        },
+        {
+          "data_path": "action_result.parameter.comment",
+          "data_type": "string"
         },
         {
           "data_path": "action_result.parameter.tags",
@@ -1667,29 +1912,27 @@
         {
           "data_path": "action_result.parameter.url",
           "data_type": "string",
-          "contains": ["url"]
+          "contains": [
+            "url"
+          ]
         },
         {
-          "data_path": "action_result.parameter.comment",
-          "data_type": "string"
-        },
-        {
-          "data_path": "action_result.status",
+          "data_path": "action_result.data.*.categoryId",
           "data_type": "string",
-          "column_name": "status",
-          "column_order": 0
+          "column_name": "Category ID",
+          "column_order": 2
+        },
+        {
+          "data_path": "action_result.data.*.comment",
+          "data_type": "string",
+          "column_name": "Comment",
+          "column_order": 5
         },
         {
           "data_path": "action_result.data.*.id",
           "data_type": "string",
           "column_name": "ID",
           "column_order": 1
-        },
-        {
-          "data_path": "action_result.data.*.categoryId",
-          "data_type": "string",
-          "column_name": "category Id",
-          "column_order": 2
         },
         {
           "data_path": "action_result.data.*.tags",
@@ -1700,31 +1943,33 @@
         {
           "data_path": "action_result.data.*.url",
           "data_type": "string",
-          "contains": ["url"],
-          "column_name": "url",
+          "contains": [
+            "url"
+          ],
+          "column_name": "URL",
           "column_order": 4
-        },
-        {
-          "data_path": "action_result.data.*.comment",
-          "data_type": "string",
-          "column_name": "comment",
-          "column_order": 5
-        },
-        {
-          "data_path": "action_result.message",
-          "data_type": "string"
         },
         {
           "data_path": "action_result.summary",
           "data_type": "string"
         },
         {
+          "data_path": "action_result.message",
+          "data_type": "string"
+        },
+        {
           "data_path": "summary.total_objects",
-          "data_type": "numeric"
+          "data_type": "numeric",
+          "example_values": [
+            1
+          ]
         },
         {
           "data_path": "summary.total_objects_successful",
-          "data_type": "numeric"
+          "data_type": "numeric",
+          "example_values": [
+            1
+          ]
         }
       ],
       "render": {
@@ -1743,11 +1988,20 @@
           "description": "The endpoint ID",
           "data_type": "string",
           "required": true,
-          "primary": true,
           "order": 0
         }
       },
       "output": [
+        {
+          "data_path": "action_result.status",
+          "data_type": "string",
+          "column_name": "Status",
+          "column_order": 1,
+          "example_values": [
+            "success",
+            "failed"
+          ]
+        },
         {
           "data_path": "action_result.parameter.endpoint_id",
           "data_type": "string",
@@ -1755,34 +2009,10 @@
           "column_order": 0
         },
         {
-          "data_path": "action_result.status",
-          "data_type": "string",
-          "column_name": "status",
-          "column_order": 1
-        },
-        {
           "data_path": "action_result.data.*.enabled",
           "data_type": "boolean",
-          "column_name": "enabled",
+          "column_name": "Enabled",
           "column_order": 2
-        },
-        {
-          "data_path": "action_result.data.*.lastEnabledAt",
-          "data_type": "string"
-        },
-        {
-          "data_path": "action_result.data.*.lastEnabledBy.id",
-          "data_type": "string",
-          "column_name": "last enabled by",
-          "column_order": 3
-        },
-        {
-          "data_path": "action_result.data.*.lastEnabledBy.type",
-          "data_type": "string",
-          "example_values": [
-            "user",
-            "service"
-          ]
         },
         {
           "data_path": "action_result.data.*.lastDisabledAt",
@@ -1791,7 +2021,7 @@
         {
           "data_path": "action_result.data.*.lastDisabledBy.id",
           "data_type": "string",
-          "column_name": "last disabled by",
+          "column_name": "Last Disabled By",
           "column_order": 4
         },
         {
@@ -1803,20 +2033,44 @@
           ]
         },
         {
-          "data_path": "action_result.message",
+          "data_path": "action_result.data.*.lastEnabledAt",
           "data_type": "string"
+        },
+        {
+          "data_path": "action_result.data.*.lastEnabledBy.id",
+          "data_type": "string",
+          "column_name": "Last Enabled By",
+          "column_order": 3
+        },
+        {
+          "data_path": "action_result.data.*.lastEnabledBy.type",
+          "data_type": "string",
+          "example_values": [
+            "user",
+            "service"
+          ]
         },
         {
           "data_path": "action_result.summary",
           "data_type": "string"
         },
         {
+          "data_path": "action_result.message",
+          "data_type": "string"
+        },
+        {
           "data_path": "summary.total_objects",
-          "data_type": "numeric"
+          "data_type": "numeric",
+          "example_values": [
+            1
+          ]
         },
         {
           "data_path": "summary.total_objects_successful",
-          "data_type": "numeric"
+          "data_type": "numeric",
+          "example_values": [
+            1
+          ]
         }
       ],
       "render": {
@@ -1833,10 +2087,8 @@
       "parameters": {
         "ids": {
           "description": "List of endpoint IDs (comma separated)",
-          "verbose": "Must contain at most 50 items",
           "data_type": "string",
           "required": true,
-          "primary": false,
           "allow_list": true,
           "order": 0
         },
@@ -1844,21 +2096,27 @@
           "description": "Whether the endpoints should be isolated",
           "data_type": "boolean",
           "required": true,
-          "primary": true,
           "order": 1
         },
         "comment": {
           "description": "Reason the endpoints should be isolated",
-          "verbose": "Max digits supported are 400",
           "data_type": "string",
-          "primary": false,
-          "required": false,
           "order": 2
         }
       },
       "output": [
         {
-          "data_path": "action_result.parameter.ids",
+          "data_path": "action_result.status",
+          "data_type": "string",
+          "column_name": "Status",
+          "column_order": 0,
+          "example_values": [
+            "success",
+            "failed"
+          ]
+        },
+        {
+          "data_path": "action_result.parameter.comment",
           "data_type": "string"
         },
         {
@@ -1866,14 +2124,8 @@
           "data_type": "string"
         },
         {
-          "data_path": "action_result.parameter.comment",
+          "data_path": "action_result.parameter.ids",
           "data_type": "string"
-        },
-        {
-          "data_path": "action_result.status",
-          "data_type": "string",
-          "column_name": "status",
-          "column_order": 0
         },
         {
           "data_path": "action_result.data.*.id",
@@ -1888,31 +2140,13 @@
           "column_order": 2
         },
         {
-          "data_path": "action_result.data.*.isolation.lastEnabledAt",
-          "data_type": "string"
-        },
-        {
-          "data_path": "action_result.data.*.isolation.lastEnabledBy.id",
-          "data_type": "string",
-          "column_name": "last enabled by",
-          "column_order": 3
-        },
-        {
-          "data_path": "action_result.data.*.isolation.lastEnabledBy.type",
-          "data_type": "string",
-          "example_values": [
-            "user",
-            "service"
-          ]
-        },
-        {
           "data_path": "action_result.data.*.isolation.lastDisabledAt",
           "data_type": "string"
         },
         {
           "data_path": "action_result.data.*.isolation.lastDisabledBy.id",
           "data_type": "string",
-          "column_name": "last disabled by",
+          "column_name": "Last Disabled By",
           "column_order": 4
         },
         {
@@ -1924,20 +2158,44 @@
           ]
         },
         {
+          "data_path": "action_result.data.*.isolation.lastEnabledAt",
+          "data_type": "string"
+        },
+        {
+          "data_path": "action_result.data.*.isolation.lastEnabledBy.id",
+          "data_type": "string",
+          "column_name": "Last Enabled By",
+          "column_order": 3
+        },
+        {
+          "data_path": "action_result.data.*.isolation.lastEnabledBy.type",
+          "data_type": "string",
+          "example_values": [
+            "user",
+            "service"
+          ]
+        },
+        {
+          "data_path": "action_result.summary.number_of_endpoints_isolation_settings_updated",
+          "data_type": "numeric"
+        },
+        {
           "data_path": "action_result.message",
           "data_type": "string"
         },
         {
           "data_path": "summary.total_objects",
-          "data_type": "numeric"
+          "data_type": "numeric",
+          "example_values": [
+            1
+          ]
         },
         {
           "data_path": "summary.total_objects_successful",
-          "data_type": "numeric"
-        },
-        {
-          "data_path": "action_result.summary.number_of_endpoints_isolation_settings_updated",
-          "data_type": "numeric"
+          "data_type": "numeric",
+          "example_values": [
+            1
+          ]
         }
       ],
       "render": {
