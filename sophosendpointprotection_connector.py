@@ -112,7 +112,8 @@ class SophosEndpointProtectionConnector(BaseConnector):
         try:
             resp_json = r.json()
         except Exception as e:
-            return RetVal(action_result.set_status(phantom.APP_ERROR, "Unable to parse JSON response. Error: {0}".format(str(e))), None)
+            return RetVal(action_result.set_status(phantom.APP_ERROR,
+                "Unable to parse JSON response. Error: {0}".format(str(e))), None)
 
         # Please specify the status codes here
         if 200 <= r.status_code < 399:
@@ -163,7 +164,8 @@ class SophosEndpointProtectionConnector(BaseConnector):
             r = request_func(endpoint, json=json, data=data, headers=headers, params=params)
             # self.save_progress("Request function results: {}".format(r.text))
         except Exception as e:
-            return RetVal(action_result.set_status(phantom.APP_ERROR, ('Error connecting to server. Details: {0}').format(str(e))), resp_json)
+            return RetVal(action_result.set_status(phantom.APP_ERROR,
+                ('Error connecting to server. Details: {0}').format(str(e))), resp_json)
         # self.save_progress("Returning the results found for the request")
         return self._process_response(r, action_result)
 
@@ -286,7 +288,8 @@ class SophosEndpointProtectionConnector(BaseConnector):
         params = {}
         data = {}
         endpoint = ENDPOINTS_ENDPOINT
-        ret_val, response = self._make_rest_call_helper(action_result, endpoint, params=params, data=json.dumps(data), method='get')
+        ret_val, response = self._make_rest_call_helper(action_result, endpoint, params=params,
+            data=json.dumps(data), method='get')
         if (phantom.is_fail(ret_val)):
             return self.set_status_save_progress(
                 phantom.APP_ERROR,
@@ -307,13 +310,15 @@ class SophosEndpointProtectionConnector(BaseConnector):
 
         # Casting keys format (e.g. page_from_key --> pageFromKey)
         r_pattern = r"([_])\s*([a-z])"
-        params = {re.sub(r_pattern, lambda m: m.group(0).upper(), k).replace('_', ''): v for k, v in param.items() if k != "context"}
+        params = {re.sub(r_pattern, lambda m: m.group(0).upper(), k).replace('_', ''): v for k,
+            v in param.items() if k != "context"}
 
         if action_name == 'list endpoints':
             params["pageTotal"] = True
 
             while True:
-                ret_val, response = self._make_rest_call_helper(action_result, endpoint, params=params, data=json.dumps(data), method='get')
+                ret_val, response = self._make_rest_call_helper(action_result, endpoint, params=params,
+                    data=json.dumps(data), method='get')
                 if phantom.is_fail(ret_val):
                     return action_result.get_status()
 
@@ -333,7 +338,8 @@ class SophosEndpointProtectionConnector(BaseConnector):
 
         elif action_name == 'get individual endpoint':
             final_endpoint = "{}/{}".format(endpoint, params.pop('endpointid'))
-            ret_val, response = self._make_rest_call_helper(action_result, final_endpoint, params=params, data=json.dumps(data), method='get')
+            ret_val, response = self._make_rest_call_helper(action_result, final_endpoint, params=params,
+                data=json.dumps(data), method='get')
 
             if phantom.is_fail(ret_val):
                 return action_result.get_status()
@@ -346,7 +352,8 @@ class SophosEndpointProtectionConnector(BaseConnector):
 
         elif action_name == 'delete endpoint':
             final_endpoint = "{}/{}".format(endpoint, params.pop('endpointid'))
-            ret_val, response = self._make_rest_call_helper(action_result, endpoint, params=params, data=json.dumps(data), method='delete')
+            ret_val, response = self._make_rest_call_helper(action_result, endpoint, params=params,
+                data=json.dumps(data), method='delete')
             if phantom.is_fail(ret_val):
                 return action_result.get_status()
             action_result.set_status(phantom.APP_SUCCESS, SOPHOS_OKAY_MESSAGE)
@@ -433,7 +440,8 @@ class SophosEndpointProtectionConnector(BaseConnector):
 
         if action_name == 'get settings':
             self.save_progress("Getting tamper protection settings")
-            ret_val, response = self._make_rest_call_helper(action_result, endpoint, params={}, data=json.dumps(data), method='get')
+            ret_val, response = self._make_rest_call_helper(action_result, endpoint, params={},
+                data=json.dumps(data), method='get')
             if phantom.is_fail(ret_val):
                 return action_result.get_status()
             action_result.set_status(phantom.APP_SUCCESS, SOPHOS_OKAY_MESSAGE)
@@ -447,7 +455,8 @@ class SophosEndpointProtectionConnector(BaseConnector):
             self.save_progress("Updating tamper protection settings")
             data['enabled'] = param["enabled"]
             data['regeneratePassword'] = param.get('regenerate_password', False)
-            ret_val, response = self._make_rest_call_helper(action_result, endpoint, params={}, data=json.dumps(data), method='post')
+            ret_val, response = self._make_rest_call_helper(action_result, endpoint, params={},
+                data=json.dumps(data), method='post')
             if phantom.is_fail(ret_val):
                 return action_result.get_status()
             action_result.set_status(phantom.APP_SUCCESS, SOPHOS_OKAY_MESSAGE)
@@ -495,7 +504,8 @@ class SophosEndpointProtectionConnector(BaseConnector):
 
         # Casting parameters keys format (e.g. page_size --> pageSize)
         r_pattern = r"([_])\s*([a-z])"
-        params = {re.sub(r_pattern, lambda m: m.group(0).upper(), k).replace('_', ''): v for k, v in param.items() if k != "context"}
+        params = {re.sub(r_pattern, lambda m: m.group(0).upper(), k).replace('_', ''): v for k,
+            v in param.items() if k != "context"}
         # Forcing pageTotal = true for pagination
         params['pageTotal'] = True
 
@@ -571,7 +581,8 @@ class SophosEndpointProtectionConnector(BaseConnector):
         action_result = self.add_action_result(ActionResult(dict(param)))
 
         r_pattern = r"([_])\s*([a-z])"
-        properties = {re.sub(r_pattern, lambda m: m.group(0).upper(), k).replace('_', ''): v for k, v in param.items() if k != "context"}
+        properties = {re.sub(r_pattern, lambda m: m.group(0).upper(), k).replace('_', ''): v for k,
+            v in param.items() if k != "context"}
 
         params = {}
         data = {
@@ -582,7 +593,8 @@ class SophosEndpointProtectionConnector(BaseConnector):
 
         endpoint = LIST_ITEMS.format("blocked")
 
-        ret_val, response = self._make_rest_call_helper(action_result, endpoint, params=params, data=json.dumps(data), method='post')
+        ret_val, response = self._make_rest_call_helper(action_result, endpoint, params=params,
+            data=json.dumps(data), method='post')
         if (phantom.is_fail(ret_val)):
             return action_result.get_status()
 
@@ -595,7 +607,8 @@ class SophosEndpointProtectionConnector(BaseConnector):
         action_result = self.add_action_result(ActionResult(dict(param)))
 
         r_pattern = r"([_])\s*([a-z])"
-        properties = {re.sub(r_pattern, lambda m: m.group(0).upper(), k).replace('_', ''): v for k, v in param.items() if k != "context"}
+        properties = {re.sub(r_pattern, lambda m: m.group(0).upper(), k).replace('_', ''): v for k,
+            v in param.items() if k != "context"}
 
         # Validate 'property_type'
         property_type = properties.pop("propertyType")
@@ -611,7 +624,8 @@ class SophosEndpointProtectionConnector(BaseConnector):
 
         endpoint = LIST_ITEMS.format("allowed")
 
-        ret_val, response = self._make_rest_call_helper(action_result, endpoint, params=params, data=json.dumps(data), method='post')
+        ret_val, response = self._make_rest_call_helper(action_result, endpoint, params=params,
+            data=json.dumps(data), method='post')
         if (phantom.is_fail(ret_val)):
             return action_result.get_status()
 
@@ -655,7 +669,8 @@ class SophosEndpointProtectionConnector(BaseConnector):
         if category_id < 1 and len(data["tags"]) < 1:
             action_result.set_status(phantom.APP_ERROR, SOPHOS_PARAMS_NOTFOUND_ERR.format(name="category_id or tags"))
 
-        ret_val, response = self._make_rest_call_helper(action_result, LIST_SITES, params={}, data=json.dumps(data), method='post')
+        ret_val, response = self._make_rest_call_helper(action_result, LIST_SITES, params={},
+            data=json.dumps(data), method='post')
         if (phantom.is_fail(ret_val)):
             return action_result.get_status()
 
@@ -687,7 +702,8 @@ class SophosEndpointProtectionConnector(BaseConnector):
             "comment": param.get("comment", "")
         }
 
-        ret_val, response = self._make_rest_call_helper(action_result, ISOLATION_ENDPOINT, params={}, data=json.dumps(data), method='post')
+        ret_val, response = self._make_rest_call_helper(action_result, ISOLATION_ENDPOINT, params={},
+            data=json.dumps(data), method='post')
         if phantom.is_fail(ret_val):
             return action_result.get_status()
 
