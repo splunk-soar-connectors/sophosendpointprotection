@@ -68,7 +68,7 @@
         "page_size": {
           "description": "The size of the page requested",
           "data_type": "string",
-          "default": 50,
+          "default": "50",
           "order": 1
         },
         "sort": {
@@ -541,13 +541,13 @@
         "enabled": {
           "description": "Whether Tamper Protection should be turned on for the endpoint",
           "data_type": "boolean",
-          "default": "true",
+          "default": true,
           "order": 1
         },
         "regenerate_password": {
           "description": "Whether a new Tamper Protection password should be generated",
           "data_type": "boolean",
-          "default": "false",
+          "default": false,
           "order": 2
         }
       },
