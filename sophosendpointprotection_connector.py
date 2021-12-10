@@ -174,8 +174,7 @@ class SophosEndpointProtectionConnector(BaseConnector):
             self.save_progress("Didn't find the JWT token, trying to fetch one.")
             ret_val = self._get_token(action_result)
             if phantom.is_fail(ret_val):
-                return ret_val
-                # return (action_result.set_status(), None)
+                return (action_result.get_status(), None)
         url = ("{0}{1}").format(self._base_url, endpoint)
         self.save_progress("Hitting the URL: {}".format(url))
         # self.save_progress("Calling REST HELPER")
@@ -241,8 +240,8 @@ class SophosEndpointProtectionConnector(BaseConnector):
         ret_val, resp_json = self._make_rest_call(url, action_result, headers=headers, data=data, method='post')
         self.save_progress(("Response in JSON: {}".format(resp_json)))
         self.save_progress(("Return value: {}".format(ret_val)))
-        if phantom.is_fail(ret_val):
-            return ret_val
+        if not ret_val:
+            return self.set_status(phantom.APP_ERROR,"Token not found")
 
         self.save_progress(("Saving to state"))
         self._state[SOPHOS_JWT_JSON] = resp_json
@@ -293,8 +292,10 @@ class SophosEndpointProtectionConnector(BaseConnector):
         endpoint = ENDPOINTS_ENDPOINT
         ret_val, response = self._make_rest_call_helper(action_result, endpoint, params=params, data=json.dumps(data), method='get')
         if (phantom.is_fail(ret_val)):
-            self.save_progress("Test Connectivity Failed.")
-            return action_result.get_status()
+            return self.set_status_save_progress(
+                phantom.APP_ERROR,
+                "Test Connectivity Failed"
+            )
         self.save_progress("Test Connectivity Passed")
         return action_result.set_status(phantom.APP_SUCCESS)
 
