@@ -241,7 +241,7 @@ class SophosEndpointProtectionConnector(BaseConnector):
         self.save_progress(("Response in JSON: {}".format(resp_json)))
         self.save_progress(("Return value: {}".format(ret_val)))
         if not ret_val:
-            return self.set_status(phantom.APP_ERROR,"Token not found")
+            return self.set_status(phantom.APP_ERROR, "Token not found")
 
         self.save_progress(("Saving to state"))
         self._state[SOPHOS_JWT_JSON] = resp_json
