@@ -280,10 +280,6 @@ class SophosEndpointProtectionConnector(BaseConnector):
     #     response = requests.request("POST", WHOAMI_ENDPOINT, headers=headers, data = payload)
     #     return json.loads(response.text)['id']
 
-    """
-    Handling Test Connectivity.
-    Make a GET call to '/endpoints' endpoint.
-    """
     def _handle_test_connectivity(self, param):
         action_result = self.add_action_result(ActionResult(dict(param)))
         self.save_progress("Connecting to the endpoint for test connectivity")
@@ -298,6 +294,11 @@ class SophosEndpointProtectionConnector(BaseConnector):
             )
         self.save_progress("Test Connectivity Passed")
         return action_result.set_status(phantom.APP_SUCCESS)
+
+    """
+    Handling Test Connectivity.
+    Make a GET call to '/endpoints' endpoint.
+    """
 
     def _handle_endpoints(self, action_result, param):
         data = {}
