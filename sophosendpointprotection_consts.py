@@ -17,7 +17,7 @@ SOPHOS_CLIENT_ID = "client_id"
 SOPHOS_CLIENT_SECRET = "client_secret"
 
 SOPHOS_JWT_JSON = "jwt_json"
-SOPHOS_JWT_TOKEN = "jwt-token"
+SOPHOS_JWT_TOKEN = "access_token"
 
 SOPHOS_PT_JSON = "pt_json"
 SOPHOS_PT_API_HOSTS = "apiHosts"
