@@ -1,6 +1,6 @@
 # File: sophosendpointprotection_connector.py
 #
-# Copyright (c) 2021 Splunk Inc.
+# Copyright (c) 2021-2022 Splunk Inc.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -465,7 +465,7 @@ class SophosEndpointProtectionConnector(BaseConnector):
             summary['number_of_endpoints_tamperprotection_settings_updated'] = 1
             return phantom.APP_SUCCESS
 
-    def _update_tamperprotection_settings(self, param):
+    def _handle_tamper_protection_switch(self, param):
         self.save_progress("In action handler for: {0}".format(self.get_action_identifier()))
         action_result = self.add_action_result(ActionResult(dict(param)))
         param['action_name'] = 'update settings'
@@ -474,7 +474,7 @@ class SophosEndpointProtectionConnector(BaseConnector):
             return action_result.get_status()
         return action_result.set_status(phantom.APP_SUCCESS)
 
-    def _get_tamperprotection_settings(self, param):
+    def _handle_get_tamper_protection_settings(self, param):
         self.save_progress("In action handler for: {0}".format(self.get_action_identifier()))
         action_result = self.add_action_result(ActionResult(dict(param)))
         param['action_name'] = 'get settings'
@@ -678,7 +678,7 @@ class SophosEndpointProtectionConnector(BaseConnector):
         action_result.add_data(response)
         return action_result.set_status(phantom.APP_SUCCESS)
 
-    def _handle_get_isolation(self, param):
+    def _handle_get_isolation_settings(self, param):
         self.save_progress("In action handler for: {0}".format(self.get_action_identifier()))
         action_result = self.add_action_result(ActionResult(dict(param)))
 
@@ -691,7 +691,7 @@ class SophosEndpointProtectionConnector(BaseConnector):
         action_result.add_data(response)
         return action_result.set_status(phantom.APP_SUCCESS)
 
-    def _update_isolation_settings(self, param):
+    def _handle_isolation_switch(self, param):
         self.save_progress("In action handler for: {0}".format(self.get_action_identifier()))
         action_result = self.add_action_result(ActionResult(dict(param)))
 
@@ -739,10 +739,10 @@ class SophosEndpointProtectionConnector(BaseConnector):
             ret_val = self._handle_check_updates(param)
 
         elif action_id == 'tamper_protection_switch':
-            ret_val = self._update_tamperprotection_settings(param)
+            ret_val = self._handle_tamper_protection_switch(param)
 
         elif action_id == 'get_tamper_protection_settings':
-            ret_val = self._get_tamperprotection_settings(param)
+            ret_val = self._handle_get_tamper_protection_settings(param)
 
         elif action_id == 'perform_scan':
             ret_val = self._perform_scan(param)
@@ -769,10 +769,10 @@ class SophosEndpointProtectionConnector(BaseConnector):
             ret_val = self._handle_add_site(param)
 
         elif action_id == 'get_isolation_settings':
-            ret_val = self._handle_get_isolation(param)
+            ret_val = self._handle_get_isolation_settings(param)
 
         elif action_id == 'isolation_switch':
-            ret_val = self._update_isolation_settings(param)
+            ret_val = self._handle_isolation_switch(param)
 
         return ret_val
 
