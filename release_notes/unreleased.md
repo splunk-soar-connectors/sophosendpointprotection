@@ -1,1 +1,2 @@
 **Unreleased**
+* Renamed the state file token key

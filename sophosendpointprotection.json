@@ -21,12 +21,13 @@
             "name": "John Wang"
         }
     ],
-    "license": "Copyright (c) 2021 Splunk Inc.",
-    "app_version": "1.0.2",
+    "license": "Copyright (c) 2021-2022 Splunk Inc.",
+    "app_version": "1.1.0",
     "utctime_updated": "2022-01-07T21:23:38.000000Z",
     "package_name": "phantom_sophosendpointprotection",
     "main_module": "sophosendpointprotection_connector.py",
-    "min_phantom_version": "5.0.0",
+    "min_phantom_version": "5.3.0",
+    "fips_compliant": false,
     "app_wizard_version": "1.0.0",
     "configuration": {
         "client_id": {
