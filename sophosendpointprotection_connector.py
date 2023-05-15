@@ -352,7 +352,7 @@ class SophosEndpointProtectionConnector(BaseConnector):
 
         elif action_name == 'delete endpoint':
             final_endpoint = "{}/{}".format(endpoint, params.pop('endpointid'))
-            ret_val, response = self._make_rest_call_helper(action_result, endpoint, params=params,
+            ret_val, response = self._make_rest_call_helper(action_result, final_endpoint, params=params,
                 data=json.dumps(data), method='delete')
             if phantom.is_fail(ret_val):
                 return action_result.get_status()
