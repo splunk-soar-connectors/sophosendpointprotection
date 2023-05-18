@@ -2,7 +2,7 @@
 # Sophos Endpoint Protection
 
 Publisher: Splunk Community  
-Connector Version: 1.1.0  
+Connector Version: 1.2.0  
 Product Vendor: Sophos  
 Product Name: Sophos Endpoint Protection  
 Product Version Supported (regex): ".\*"  
