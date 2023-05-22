@@ -1,6 +1,6 @@
 # File: sophosendpointprotection_connector.py
 #
-# Copyright (c) 2021-2022 Splunk Inc.
+# Copyright (c) 2021-2023 Splunk Inc.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -352,7 +352,7 @@ class SophosEndpointProtectionConnector(BaseConnector):
 
         elif action_name == 'delete endpoint':
             final_endpoint = "{}/{}".format(endpoint, params.pop('endpointid'))
-            ret_val, response = self._make_rest_call_helper(action_result, endpoint, params=params,
+            ret_val, response = self._make_rest_call_helper(action_result, final_endpoint, params=params,
                 data=json.dumps(data), method='delete')
             if phantom.is_fail(ret_val):
                 return action_result.get_status()
