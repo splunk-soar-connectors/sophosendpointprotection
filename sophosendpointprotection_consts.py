@@ -1,6 +1,6 @@
 # File: sophosendpointprotection_consts.py
 #
-# Copyright (c) 2021-2023 Splunk Inc.
+# Copyright (c) 2021-2025 Splunk Inc.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -41,7 +41,7 @@ SOPHOS_PARAMS_ENDPOINTLOCKDOWN = [
     "stopping",
     "unavailable",
     "uninstalled",
-    "unlocked"
+    "unlocked",
 ]
 
 # Endpoints
