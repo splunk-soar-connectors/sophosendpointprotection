@@ -1,7 +1,7 @@
 # Sophos Endpoint Protection
 
 Publisher: Splunk Community \
-Connector Version: 1.2.0 \
+Connector Version: 1.2.1 \
 Product Vendor: Sophos \
 Product Name: Sophos Endpoint Protection \
 Minimum Product Version: 5.5.0
