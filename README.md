@@ -1,10 +1,10 @@
 # Sophos Endpoint Protection
 
-Publisher: Splunk Community \
-Connector Version: 1.2.1 \
-Product Vendor: Sophos \
-Product Name: Sophos Endpoint Protection \
-Minimum Product Version: 5.5.0
+Publisher: Splunk Community <br>
+Connector Version: 1.2.1 <br>
+Product Vendor: Sophos <br>
+Product Name: Sophos Endpoint Protection <br>
+Minimum Product Version: 6.3.0
 
 This app supports various investigative and containment actions on Sophos Endpoint Protection
 
@@ -19,29 +19,29 @@ VARIABLE | REQUIRED | TYPE | DESCRIPTION
 
 ### Supported Actions
 
-[test connectivity](#action-test-connectivity) - Validate the asset configuration for connectivity using supplied configuration \
-[list endpoints](#action-list-endpoints) - List all the endpoints/sensors configured on the device \
-[check updates](#action-check-updates) - Send a request to the endpoint to check for Sophos management agent software updates \
-[tamper protection switch](#action-tamper-protection-switch) - Turn Tamper Protection on or off on the endpoint \
-[get tamperprotection settings](#action-get-tamperprotection-settings) - Get the Tamper Protection settings for the specified endpoint \
-[perform scan](#action-perform-scan) - Send a request to the specified endpoint to perform or configure a scan \
-[delete endpoint](#action-delete-endpoint) - Delete the specified endpoint \
-[get individual endpoint](#action-get-individual-endpoint) - Get the endpoint based on ID \
-[list items](#action-list-items) - Get all allowed or blocked items \
-[delete item](#action-delete-item) - Delete the specified blocked or allowed item \
-[block item](#action-block-item) - Add item to blocked list \
-[allow item](#action-allow-item) - Add item to allowed list \
-[list sites](#action-list-sites) - Get all local sites \
-[delete site](#action-delete-site) - Delete the specified local site \
-[add site](#action-add-site) - Add a new local site \
-[get isolation settings](#action-get-isolation-settings) - Get isolation settings for an endpoint \
+[test connectivity](#action-test-connectivity) - Validate the asset configuration for connectivity using supplied configuration <br>
+[list endpoints](#action-list-endpoints) - List all the endpoints/sensors configured on the device <br>
+[check updates](#action-check-updates) - Send a request to the endpoint to check for Sophos management agent software updates <br>
+[tamper protection switch](#action-tamper-protection-switch) - Turn Tamper Protection on or off on the endpoint <br>
+[get tamperprotection settings](#action-get-tamperprotection-settings) - Get the Tamper Protection settings for the specified endpoint <br>
+[perform scan](#action-perform-scan) - Send a request to the specified endpoint to perform or configure a scan <br>
+[delete endpoint](#action-delete-endpoint) - Delete the specified endpoint <br>
+[get individual endpoint](#action-get-individual-endpoint) - Get the endpoint based on ID <br>
+[list items](#action-list-items) - Get all allowed or blocked items <br>
+[delete item](#action-delete-item) - Delete the specified blocked or allowed item <br>
+[block item](#action-block-item) - Add item to blocked list <br>
+[allow item](#action-allow-item) - Add item to allowed list <br>
+[list sites](#action-list-sites) - Get all local sites <br>
+[delete site](#action-delete-site) - Delete the specified local site <br>
+[add site](#action-add-site) - Add a new local site <br>
+[get isolation settings](#action-get-isolation-settings) - Get isolation settings for an endpoint <br>
 [isolation switch](#action-isolation-switch) - Turn on or off endpoint isolation for multiple endpoints
 
 ## action: 'test connectivity'
 
 Validate the asset configuration for connectivity using supplied configuration
 
-Type: **test** \
+Type: **test** <br>
 Read only: **True**
 
 #### Action Parameters
@@ -56,7 +56,7 @@ No Output
 
 List all the endpoints/sensors configured on the device
 
-Type: **investigate** \
+Type: **investigate** <br>
 Read only: **True**
 
 #### Action Parameters
@@ -136,7 +136,7 @@ summary.total_objects_successful | numeric | | 1 |
 
 Send a request to the endpoint to check for Sophos management agent software updates
 
-Type: **contain** \
+Type: **contain** <br>
 Read only: **False**
 
 #### Action Parameters
@@ -163,7 +163,7 @@ summary.total_objects_successful | numeric | | 1 |
 
 Turn Tamper Protection on or off on the endpoint
 
-Type: **contain** \
+Type: **contain** <br>
 Read only: **False**
 
 Turn Tamper Protection on or off on the endpoint or generate a new Tamper Protection password. Note that Tamper Protection can be enabled for an endpoint only if it has also been enabled globally.
@@ -197,7 +197,7 @@ summary.total_objects_successful | numeric | | 1 |
 
 Get the Tamper Protection settings for the specified endpoint
 
-Type: **investigate** \
+Type: **investigate** <br>
 Read only: **True**
 
 #### Action Parameters
@@ -226,7 +226,7 @@ summary.total_objects_successful | numeric | | 1 |
 
 Send a request to the specified endpoint to perform or configure a scan
 
-Type: **contain** \
+Type: **contain** <br>
 Read only: **False**
 
 #### Action Parameters
@@ -252,7 +252,7 @@ summary.total_objects_successful | numeric | | 1 |
 
 Delete the specified endpoint
 
-Type: **correct** \
+Type: **correct** <br>
 Read only: **False**
 
 #### Action Parameters
@@ -277,7 +277,7 @@ summary.total_objects_successful | numeric | | 1 |
 
 Get the endpoint based on ID
 
-Type: **contain** \
+Type: **contain** <br>
 Read only: **True**
 
 #### Action Parameters
@@ -339,7 +339,7 @@ summary.total_objects_successful | numeric | | 1 |
 
 Get all allowed or blocked items
 
-Type: **investigate** \
+Type: **investigate** <br>
 Read only: **True**
 
 #### Action Parameters
@@ -372,7 +372,7 @@ summary.total_objects_successful | numeric | | 1 |
 
 Delete the specified blocked or allowed item
 
-Type: **correct** \
+Type: **correct** <br>
 Read only: **True**
 
 #### Action Parameters
@@ -399,7 +399,7 @@ summary.total_objects_successful | numeric | | 1 |
 
 Add item to blocked list
 
-Type: **investigate** \
+Type: **investigate** <br>
 Read only: **True**
 
 Block an item from exoneration by SHA256 checksum.
@@ -438,7 +438,7 @@ summary.total_objects_successful | numeric | | 1 |
 
 Add item to allowed list
 
-Type: **investigate** \
+Type: **investigate** <br>
 Read only: **True**
 
 Exempt an item from conviction by path, SHA256 checksum or certificate signer.
@@ -484,7 +484,7 @@ summary.total_objects_successful | numeric | | 1 |
 
 Get all local sites
 
-Type: **investigate** \
+Type: **investigate** <br>
 Read only: **True**
 
 #### Action Parameters
@@ -515,8 +515,8 @@ summary.total_objects_successful | numeric | | |
 
 Delete the specified local site
 
-Type: **correct** \
-Read only: **True**
+Type: **correct** <br>
+Read only: **False**
 
 #### Action Parameters
 
@@ -540,7 +540,7 @@ summary.total_objects_successful | numeric | | 1 |
 
 Add a new local site
 
-Type: **investigate** \
+Type: **investigate** <br>
 Read only: **True**
 
 #### Action Parameters
@@ -575,7 +575,7 @@ summary.total_objects_successful | numeric | | 1 |
 
 Get isolation settings for an endpoint
 
-Type: **investigate** \
+Type: **investigate** <br>
 Read only: **True**
 
 #### Action Parameters
@@ -606,7 +606,7 @@ summary.total_objects_successful | numeric | | 1 |
 
 Turn on or off endpoint isolation for multiple endpoints
 
-Type: **contain** \
+Type: **contain** <br>
 Read only: **False**
 
 #### Action Parameters
@@ -642,7 +642,7 @@ ______________________________________________________________________
 
 Auto-generated Splunk SOAR Connector documentation.
 
-Copyright 2025 Splunk Inc.
+Copyright 2026 Splunk Inc.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
