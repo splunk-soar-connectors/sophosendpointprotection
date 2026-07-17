@@ -1,6 +1,6 @@
 # File: sophosendpointprotection_connector.py
 #
-# Copyright (c) 2021-2025 Splunk Inc.
+# Copyright (c) 2021-2026 Splunk Inc.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -17,8 +17,10 @@
 
 import json
 import re
+from urllib.parse import quote, urlparse
 
 # Phantom App imports
+import encryption_helper
 import phantom.app as phantom
 import requests
 from bs4 import BeautifulSoup
@@ -51,23 +53,102 @@ class SophosEndpointProtectionConnector(BaseConnector):
         self._client_id = config[SOPHOS_CLIENT_ID].encode("utf-8")
         self._client_secret = config[SOPHOS_CLIENT_SECRET].encode("utf-8")
         self._state = self.load_state()
-        self._JWT_token = self._state.get(SOPHOS_JWT_JSON, {}).get(SOPHOS_JWT_TOKEN)
+        self._load_jwt_from_state()
         pt_json = self._state.get(SOPHOS_PT_JSON, None)
-        # self.save_progress("Printing the pt_json: ".format(str(json.dumps(pt_json))))
         if pt_json is not None:
-            self._id_type = pt_json["idType"]
-            if pt_json["idType"] == "tenant":
-                self._base_url = pt_json.get(SOPHOS_PT_API_HOSTS, {}).get(SOPHOS_PT_DATA_REGION_URL, None)
-            elif pt_json["idType"] == "organization" or pt_json["idType"] == "partner":
-                self._base_url = pt_json.get(SOPHOS_PT_API_HOSTS, {}).get(SOPHOS_PT_GLOBAL_URL, None)
-        else:
-            self._base_url = None
-        self._partner_token = self._state.get(SOPHOS_PT_JSON, {}).get(SOPHOS_PT_TOKEN)
+            self._base_url = self._select_api_host(pt_json)
+            if self._base_url:
+                self._id_type = pt_json["idType"]
+                self._partner_token = pt_json.get(SOPHOS_PT_TOKEN)
+            else:
+                self._state.pop(SOPHOS_PT_JSON, None)
         return phantom.APP_SUCCESS
 
     def finalize(self):
+        if self._JWT_token and not self._store_encrypted_jwt(self._state.get(SOPHOS_JWT_JSON, {})):
+            self._state.pop(SOPHOS_JWT_JSON, None)
+            self._state.pop(SOPHOS_JWT_TOKEN_IS_ENCRYPTED, None)
         self.save_state(self._state)
         return phantom.APP_SUCCESS
+
+    def _load_jwt_from_state(self):
+        jwt_json = self._state.get(SOPHOS_JWT_JSON, {})
+        token = jwt_json.get(SOPHOS_JWT_TOKEN)
+        if not token:
+            return
+
+        if self._state.get(SOPHOS_JWT_TOKEN_IS_ENCRYPTED, False):
+            try:
+                self._JWT_token = encryption_helper.decrypt(token, self.get_asset_id())
+            except Exception as exc:
+                self.debug_print(f"Unable to decrypt cached JWT; discarding it: {self._get_error_message_from_exception(exc)}")
+                self._state.pop(SOPHOS_JWT_JSON, None)
+                self._state.pop(SOPHOS_JWT_TOKEN_IS_ENCRYPTED, None)
+            return
+
+        # Migrate legacy plaintext state immediately so the next state save is encrypted.
+        self._JWT_token = token
+        if not self._store_encrypted_jwt(jwt_json):
+            self._JWT_token = None
+            self._state.pop(SOPHOS_JWT_JSON, None)
+
+    def _store_encrypted_jwt(self, jwt_json):
+        try:
+            encrypted_token = encryption_helper.encrypt(self._JWT_token, self.get_asset_id())
+        except Exception as exc:
+            self.debug_print(f"Unable to encrypt cached JWT: {self._get_error_message_from_exception(exc)}")
+            return False
+        if not encrypted_token:
+            return False
+        encrypted_jwt = dict(jwt_json) if isinstance(jwt_json, dict) else {}
+        encrypted_jwt[SOPHOS_JWT_TOKEN] = encrypted_token
+        self._state[SOPHOS_JWT_JSON] = encrypted_jwt
+        self._state[SOPHOS_JWT_TOKEN_IS_ENCRYPTED] = True
+        return True
+
+    @staticmethod
+    def _validate_api_host(api_host):
+        if not isinstance(api_host, str):
+            return None
+        try:
+            parsed = urlparse(api_host)
+            hostname = parsed.hostname or ""
+            if parsed.port is not None:
+                return None
+        except (TypeError, ValueError):
+            return None
+
+        if (
+            parsed.scheme != "https"
+            or parsed.username is not None
+            or parsed.password is not None
+            or parsed.path not in ("", "/")
+            or parsed.params
+            or parsed.query
+            or parsed.fragment
+            or not re.fullmatch(r"api(?:-[a-z0-9]+)?\.central\.sophos\.com", hostname, re.IGNORECASE)
+        ):
+            return None
+        return f"https://{hostname.lower()}"
+
+    @staticmethod
+    def _quote_path_identifier(value):
+        return quote(str(value), safe="")
+
+    def _select_api_host(self, identity):
+        if not isinstance(identity, dict):
+            return None
+        id_type = identity.get("idType")
+        api_hosts = identity.get(SOPHOS_PT_API_HOSTS, {})
+        if not isinstance(api_hosts, dict):
+            return None
+        if id_type == "tenant":
+            candidate = api_hosts.get(SOPHOS_PT_DATA_REGION_URL)
+        elif id_type in ("organization", "partner"):
+            candidate = api_hosts.get(SOPHOS_PT_GLOBAL_URL)
+        else:
+            return None
+        return self._validate_api_host(candidate)
 
     def _validate_input(self, commaseparated_str, valid_values):
         """Validating input values provided as comma separated strings"""
@@ -109,7 +190,7 @@ class SophosEndpointProtectionConnector(BaseConnector):
             return RetVal(action_result.set_status(phantom.APP_ERROR, f"Unable to parse JSON response. Error: {e!s}"), None)
 
         # Please specify the status codes here
-        if 200 <= r.status_code < 399:
+        if 200 <= r.status_code < 300:
             return RetVal(phantom.APP_SUCCESS, resp_json)
 
         # You should process the error returned in the json
@@ -117,9 +198,9 @@ class SophosEndpointProtectionConnector(BaseConnector):
 
         return RetVal(action_result.set_status(phantom.APP_ERROR, message), None)
 
-    def _process_response(self, r, action_result):
+    def _process_response(self, r, action_result, sensitive=False):
         # store the r_text in debug data, it will get dumped in the logs if the action fails
-        if hasattr(action_result, "add_debug_data"):
+        if not sensitive and hasattr(action_result, "add_debug_data"):
             action_result.add_debug_data({"r_status_code": r.status_code})
             action_result.add_debug_data({"r_text": r.text})
             action_result.add_debug_data({"r_headers": r.headers})
@@ -146,24 +227,23 @@ class SophosEndpointProtectionConnector(BaseConnector):
 
         return RetVal(action_result.set_status(phantom.APP_ERROR, message), None)
 
-    def _make_rest_call(self, endpoint, action_result, headers=None, params=None, data=None, json=None, method="get"):
+    def _make_rest_call(self, endpoint, action_result, headers=None, params=None, data=None, json=None, method="get", sensitive=False):
         resp_json = None
         try:
             request_func = getattr(requests, method)
         except AttributeError:
             return RetVal(action_result.set_status(phantom.APP_ERROR, f"Invalid method: {method}"), resp_json)
         try:
-            r = request_func(endpoint, json=json, data=data, headers=headers, params=params)
+            r = request_func(endpoint, json=json, data=data, headers=headers, params=params, allow_redirects=False)
             # self.save_progress("Request function results: {}".format(r.text))
         except Exception as e:
             return RetVal(action_result.set_status(phantom.APP_ERROR, (f"Error connecting to server. Details: {e!s}")), resp_json)
         # self.save_progress("Returning the results found for the request")
-        return self._process_response(r, action_result)
+        return self._process_response(r, action_result, sensitive=sensitive)
 
     def _make_rest_call_helper(self, action_result, endpoint, headers=None, params=None, data=None, json=None, method="get"):
-        jwt_json = self._state.get(SOPHOS_JWT_JSON, {})
         self.save_progress(f"idType: {self._id_type}")
-        if not jwt_json.get(SOPHOS_JWT_TOKEN) or not self._base_url or not self._id_type:
+        if not self._JWT_token or not self._base_url or not self._id_type:
             self.save_progress("Didn't find the JWT token, trying to fetch one.")
             ret_val = self._get_token(action_result)
             if phantom.is_fail(ret_val):
@@ -184,10 +264,10 @@ class SophosEndpointProtectionConnector(BaseConnector):
         self.save_progress("Trying to fetch data from the endpoint")
         ret_val, resp_json = self._make_rest_call(url, action_result, headers, params, data, json, method)
         self.save_progress(f"Response in JSON: {resp_json!s}")
-        msg = action_result.get_message()
+        msg = action_result.get_message() or ""
 
         if (
-            (msg and "token is invalid" in msg)
+            "token is invalid" in msg
             or "token has expired" in msg
             or "ExpiredAuthenticationToken" in msg
             or "authorization failed" in msg
@@ -228,16 +308,18 @@ class SophosEndpointProtectionConnector(BaseConnector):
         url = f"{JWT_TOKEN_ENDPOINT}"
         self.save_progress("Fetching the JWT token")
         self.save_progress(f"Hitting the URL for JWT token: {url}")
-        ret_val, resp_json = self._make_rest_call(url, action_result, headers=headers, data=data, method="post")
-        self.save_progress(f"Response in JSON: {resp_json}")
+        ret_val, resp_json = self._make_rest_call(url, action_result, headers=headers, data=data, method="post", sensitive=True)
         self.save_progress(f"Return value: {ret_val}")
         if not ret_val:
             return self.set_status(phantom.APP_ERROR, "Token not found")
 
         self.save_progress("Saving to state")
-        self._state[SOPHOS_JWT_JSON] = resp_json
+        if not isinstance(resp_json, dict) or not isinstance(resp_json.get(SOPHOS_JWT_TOKEN), str):
+            return action_result.set_status(phantom.APP_ERROR, "Sophos did not return a valid authentication token")
         self._JWT_token = resp_json[SOPHOS_JWT_TOKEN]
-        self.save_progress(f"Got the token: {self._JWT_token}")
+        if not self._store_encrypted_jwt(resp_json):
+            self._JWT_token = None
+            return action_result.set_status(phantom.APP_ERROR, "Unable to securely cache the authentication token")
 
         # Getting the X-Tenant-ID
         data = {}
@@ -249,14 +331,19 @@ class SophosEndpointProtectionConnector(BaseConnector):
         if phantom.is_fail(ret_val):
             return action_result.get_status()
 
+        self._base_url = self._select_api_host(resp_json)
+        partner_token = resp_json.get(SOPHOS_PT_TOKEN) if isinstance(resp_json, dict) else None
+        id_type = resp_json.get("idType") if isinstance(resp_json, dict) else None
+        if not self._base_url or not isinstance(partner_token, str) or not partner_token.strip():
+            self._state.pop(SOPHOS_PT_JSON, None)
+            self._base_url = None
+            self._partner_token = None
+            self._id_type = None
+            return action_result.set_status(phantom.APP_ERROR, "Sophos returned an invalid identity or API host")
+
         self._state[SOPHOS_PT_JSON] = resp_json
-        self._partner_token = resp_json[SOPHOS_PT_TOKEN]
-        self._id_type = resp_json["idType"]
-        # idType = partner | organization | tenant
-        if resp_json["idType"] == "tenant":
-            self._base_url = resp_json[SOPHOS_PT_API_HOSTS][SOPHOS_PT_DATA_REGION_URL]
-        else:
-            self._base_url = resp_json[SOPHOS_PT_API_HOSTS][SOPHOS_PT_GLOBAL_URL]
+        self._partner_token = partner_token
+        self._id_type = id_type
         self.save_state(self._state)
         self.save_progress("Got the partner token")
         return phantom.APP_SUCCESS
@@ -277,7 +364,7 @@ class SophosEndpointProtectionConnector(BaseConnector):
         params = {}
         data = {}
         endpoint = ENDPOINTS_ENDPOINT
-        ret_val, response = self._make_rest_call_helper(action_result, endpoint, params=params, data=json.dumps(data), method="get")
+        ret_val, _response = self._make_rest_call_helper(action_result, endpoint, params=params, data=json.dumps(data), method="get")
         if phantom.is_fail(ret_val):
             return self.set_status_save_progress(phantom.APP_ERROR, "Test Connectivity Failed")
         self.save_progress("Test Connectivity Passed")
@@ -320,7 +407,7 @@ class SophosEndpointProtectionConnector(BaseConnector):
             return phantom.APP_SUCCESS
 
         elif action_name == "get individual endpoint":
-            final_endpoint = "{}/{}".format(endpoint, params.pop("endpointid"))
+            final_endpoint = "{}/{}".format(endpoint, self._quote_path_identifier(params.pop("endpointid")))
             ret_val, response = self._make_rest_call_helper(action_result, final_endpoint, params=params, data=json.dumps(data), method="get")
 
             if phantom.is_fail(ret_val):
@@ -333,7 +420,7 @@ class SophosEndpointProtectionConnector(BaseConnector):
             return phantom.APP_SUCCESS
 
         elif action_name == "delete endpoint":
-            final_endpoint = "{}/{}".format(endpoint, params.pop("endpointid"))
+            final_endpoint = "{}/{}".format(endpoint, self._quote_path_identifier(params.pop("endpointid")))
             ret_val, response = self._make_rest_call_helper(action_result, final_endpoint, params=params, data=json.dumps(data), method="delete")
             if phantom.is_fail(ret_val):
                 return action_result.get_status()
@@ -403,7 +490,7 @@ class SophosEndpointProtectionConnector(BaseConnector):
         self.save_progress(f"In action handler for: {self.get_action_identifier()}")
         action_result = self.add_action_result(ActionResult(dict(param)))
         data = {}
-        endpoint = UPDATE_CHECK_ENDPOINT.format(param["endpointid"])
+        endpoint = UPDATE_CHECK_ENDPOINT.format(self._quote_path_identifier(param["endpointid"]))
         ret_val, response = self._make_rest_call_helper(action_result, endpoint, params={}, data=json.dumps(data), method="post")
         if phantom.is_fail(ret_val):
             return action_result.get_status()
@@ -417,7 +504,7 @@ class SophosEndpointProtectionConnector(BaseConnector):
     def _handle_tamperprotection_settings(self, action_result, param):
         data = {}
         action_name = param.get("action_name")
-        endpoint = TAMPER_PROTECTION_ENDPOINT.format(param["endpointid"])
+        endpoint = TAMPER_PROTECTION_ENDPOINT.format(self._quote_path_identifier(param["endpointid"]))
 
         if action_name == "get settings":
             self.save_progress("Getting tamper protection settings")
@@ -467,7 +554,7 @@ class SophosEndpointProtectionConnector(BaseConnector):
         action_result = self.add_action_result(ActionResult(dict(param)))
 
         data = {}
-        endpoint = SCAN_ENDPOINT.format(param["endpointid"])
+        endpoint = SCAN_ENDPOINT.format(self._quote_path_identifier(param["endpointid"]))
         ret_val, response = self._make_rest_call_helper(action_result, endpoint, params={}, data=json.dumps(data), method="post")
         if phantom.is_fail(ret_val):
             return action_result.get_status()
@@ -547,7 +634,7 @@ class SophosEndpointProtectionConnector(BaseConnector):
         if item_type not in SOPHOS_PARAMS_ITEMSTYPE:
             return action_result.set_status(phantom.APP_ERROR, SOPHOS_PARAMS_INVALID_ERR.format(name="item_type"))
 
-        param["action_endpoint"] = DELETE_ITEM.format(type=item_type, id=param["item_id"])
+        param["action_endpoint"] = DELETE_ITEM.format(type=item_type, id=self._quote_path_identifier(param["item_id"]))
 
         ret_val = self._handle_delete_settings(action_result, param)
         if phantom.is_fail(ret_val):
@@ -613,7 +700,7 @@ class SophosEndpointProtectionConnector(BaseConnector):
         self.save_progress(f"In action handler for: {self.get_action_identifier()}")
         action_result = self.add_action_result(ActionResult(dict(param)))
 
-        param["action_endpoint"] = DELETE_SITE.format(id=param["site_id"])
+        param["action_endpoint"] = DELETE_SITE.format(id=self._quote_path_identifier(param["site_id"]))
         ret_val = self._handle_delete_settings(action_result, param)
         if phantom.is_fail(ret_val):
             return action_result.get_status()
@@ -642,7 +729,7 @@ class SophosEndpointProtectionConnector(BaseConnector):
         self.save_progress(f"In action handler for: {self.get_action_identifier()}")
         action_result = self.add_action_result(ActionResult(dict(param)))
 
-        endpoint = ISOLATION_INDIVIDUAL_ENDPOINT.format(param["endpoint_id"])
+        endpoint = ISOLATION_INDIVIDUAL_ENDPOINT.format(self._quote_path_identifier(param["endpoint_id"]))
         ret_val, response = self._make_rest_call_helper(action_result, endpoint, params={}, method="get")
         if phantom.is_fail(ret_val):
             return action_result.get_status()

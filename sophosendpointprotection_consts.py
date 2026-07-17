@@ -1,6 +1,6 @@
 # File: sophosendpointprotection_consts.py
 #
-# Copyright (c) 2021-2025 Splunk Inc.
+# Copyright (c) 2021-2026 Splunk Inc.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -18,6 +18,7 @@ SOPHOS_CLIENT_SECRET = "client_secret"  # pragma: allowlist secret
 
 SOPHOS_JWT_JSON = "jwt_json"
 SOPHOS_JWT_TOKEN = "access_token"
+SOPHOS_JWT_TOKEN_IS_ENCRYPTED = "jwt_token_is_encrypted"
 
 SOPHOS_PT_JSON = "pt_json"
 SOPHOS_PT_API_HOSTS = "apiHosts"
