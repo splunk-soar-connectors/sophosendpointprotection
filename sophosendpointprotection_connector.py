@@ -362,9 +362,8 @@ class SophosEndpointProtectionConnector(BaseConnector):
         action_result = self.add_action_result(ActionResult(dict(param)))
         self.save_progress("Connecting to the endpoint for test connectivity")
         params = {}
-        data = {}
         endpoint = ENDPOINTS_ENDPOINT
-        ret_val, _response = self._make_rest_call_helper(action_result, endpoint, params=params, data=json.dumps(data), method="get")
+        ret_val, _response = self._make_rest_call_helper(action_result, endpoint, params=params, data=None, method="get")
         if phantom.is_fail(ret_val):
             return self.set_status_save_progress(phantom.APP_ERROR, "Test Connectivity Failed")
         self.save_progress("Test Connectivity Passed")
