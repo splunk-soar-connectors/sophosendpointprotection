@@ -1,7 +1,7 @@
 # Sophos Endpoint Protection
 
 Publisher: Splunk Community <br>
-Connector Version: 1.2.3 <br>
+Connector Version: 1.2.2 <br>
 Product Vendor: Sophos <br>
 Product Name: Sophos Endpoint Protection <br>
 Minimum Product Version: 6.3.0

@@ -22,7 +22,7 @@
         }
     ],
     "license": "Copyright (c) 2021-2026 Splunk Inc.",
-    "app_version": "1.2.3",
+    "app_version": "1.2.2",
     "utctime_updated": "2026-07-20T17:53:04.112711Z",
     "package_name": "phantom_sophosendpointprotection",
     "main_module": "sophosendpointprotection_connector.py",
